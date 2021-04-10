@@ -9,7 +9,17 @@ public class Player : MonoBehaviour
     [SerializeField]
     private float _speed;
 
-    [Header("Player Bounds Settings")]
+    [Header("Laser Parameters")]
+    [SerializeField]
+    private GameObject _laserPrefab;
+    [SerializeField]
+    private float _laserSpawnYOffset;
+    [SerializeField]
+    private float _laserFireRate;
+
+    private float _lastShot = -5f;
+
+    [Header("Player Bounds Parameters")]
     [SerializeField]
     [Tooltip("If false will wrap at left edge")]
     private bool _bindLeft;
@@ -17,7 +27,9 @@ public class Player : MonoBehaviour
     [Tooltip("If false will wrap at right edge")]
     private bool _bindRight;
     [SerializeField]
-    private float _leftBindX, _rightBindX, _leftWrapX, _rightWrapX;
+    private float _leftBindX, _rightBindX;
+    [SerializeField]
+    private float _leftWrapX, _rightWrapX;
     [SerializeField]
     private float _lowerBindY, _upperBindY;
 
@@ -34,44 +46,58 @@ public class Player : MonoBehaviour
 
         float xInput = Input.GetAxis("Horizontal");
         float yInput = Input.GetAxis("Vertical");
-        _inputVector.Set(xInput, yInput, 0);
+        _inputVector.Set(xInput, yInput, 0);        
+
+        // If input is detected, run movement code
+        // In place to prevent unnecessary code running when recieving no input
 
         if (_inputVector.x != 0 || _inputVector.y != 0) {
             PlayerMovement(_inputVector);
         }
+
+        if (Input.GetKeyDown(KeyCode.Space)) {
+
+            // simple cooldown for firing laser
+            if (Time.time > _lastShot + _laserFireRate) {
+                _lastShot = Time.time;
+                Shoot();
+            }
+        }
     }
+
+    #region --- Player Position ---
 
     void PlayerMovement(Vector3 input) {
 
-        Vector3 movementVector = input * _speed;
+        Vector3 movementVector = input * _speed * Time.deltaTime;
 
-        transform.Translate(movementVector * Time.deltaTime);
+        transform.Translate(movementVector);
 
-        BindPlayerPosition();
+        CheckPlayerBounds();
     }
 
-    void BindPlayerPosition() {
+    void CheckPlayerBounds() {
 
         Vector3 playerBounds = transform.position;
 
         if (_bindLeft) {
-            if (transform.position.x <= _leftBindX) {
+            if (playerBounds.x <= _leftBindX) {
                 playerBounds.x = _leftBindX;
             }
         }
         else {
-            if (transform.position.x <= _leftWrapX) {
+            if (playerBounds.x <= _leftWrapX) {
                 playerBounds.x = _rightWrapX;
             }
         }
 
         if (_bindRight) {
-            if (transform.position.x >= _rightBindX) {
+            if (playerBounds.x >= _rightBindX) {
                 playerBounds.x = _rightBindX;
             }
         }
         else {
-            if (transform.position.x >= _rightWrapX) {
+            if (playerBounds.x >= _rightWrapX) {
                 playerBounds.x = _leftWrapX;
             }
         }
@@ -79,5 +105,15 @@ public class Player : MonoBehaviour
         playerBounds.y = Mathf.Clamp(playerBounds.y, _lowerBindY, _upperBindY);
 
         transform.position = playerBounds;
+    }
+
+    #endregion
+
+    void Shoot() {
+
+        Vector3 laserSpawn = transform.position;
+        laserSpawn.y += _laserSpawnYOffset;
+
+        Instantiate(_laserPrefab, laserSpawn, Quaternion.identity);
     }
 }
