@@ -6,10 +6,13 @@ public class Player : MonoBehaviour
 {
     private Vector3 _inputVector = new Vector3(0, 0, 0);
 
+    [Header("Player Settings")]
     [SerializeField]
     private float _speed;
+    [SerializeField]
+    private int _lives;
 
-    [Header("Laser Parameters")]
+    [Header("Laser Settings")]
     [SerializeField]
     private GameObject _laserPrefab;
     [SerializeField]
@@ -19,7 +22,7 @@ public class Player : MonoBehaviour
 
     private float _lastShot = -5f;
 
-    [Header("Player Bounds Parameters")]
+    [Header("Player Bound Settings")]
     [SerializeField]
     [Tooltip("If false will wrap at left edge")]
     private bool _bindLeft;
@@ -114,6 +117,25 @@ public class Player : MonoBehaviour
         Vector3 laserSpawn = transform.position;
         laserSpawn.y += _laserSpawnYOffset;
 
-        Instantiate(_laserPrefab, laserSpawn, Quaternion.identity);
+        //Instantiate(_laserPrefab, laserSpawn, Quaternion.identity);
+        PoolManager.Instance.RequestPoolMember(laserSpawn, PoolManager.PoolType.Laser);
+    }
+
+    void Damage() {
+
+        _lives--;
+        if (_lives <= 0) {
+            //game over bro
+            Debug.Log("Game Over bro!");
+        }
+    }
+
+    private void OnTriggerEnter(Collider other) {
+
+        other.TryGetComponent<Enemy>(out Enemy enemy);
+        if (enemy != null) {
+            enemy.Damage();
+            Damage();
+        }
     }
 }

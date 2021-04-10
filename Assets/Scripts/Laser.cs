@@ -14,6 +14,20 @@ public class Laser : MonoBehaviour
         transform.Translate(Vector3.up * _speed * Time.deltaTime);
 
         if (transform.position.y >= _offScreenYPos)
-            Destroy(this.gameObject);
+            PoolManager.Instance.ReturnPoolMember(this.gameObject);
+    }
+
+    private void OnTriggerEnter(Collider other) {
+
+        other.TryGetComponent<Enemy>(out Enemy enemy);
+        if (enemy != null) {
+            Destroy(other.gameObject);
+            StartCoroutine(ReturnToPool());
+        }
+    }
+
+    IEnumerator ReturnToPool() {
+        yield return new WaitForSeconds(0.1f);
+        PoolManager.Instance.ReturnPoolMember(this.gameObject);
     }
 }
