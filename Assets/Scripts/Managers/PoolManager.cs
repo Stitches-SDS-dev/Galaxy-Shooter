@@ -8,7 +8,7 @@ public class PoolManager : MonoBehaviour
     public static PoolManager Instance {
         get {
             if (_instance == null)
-                Debug.LogError("PoolManager is NULL!");
+                Debug.LogError("PoolManager instance is NULL!");
 
             return _instance;
         }
@@ -35,8 +35,8 @@ public class PoolManager : MonoBehaviour
     [SerializeField]
     private int _initialEnemyPoolSize;
 
-    private List<GameObject> _laserPool = new List<GameObject>();
-    private List<GameObject> _enemyPool = new List<GameObject>();
+    private List<GameObject> _laserPool;
+    private List<GameObject> _enemyPool;
 
     private void Awake() {
         _instance = this;
@@ -70,15 +70,7 @@ public class PoolManager : MonoBehaviour
 
     public GameObject RequestPoolMember(Vector3 position, PoolType pool) {
 
-        List<GameObject> requestedPool = new List<GameObject>();
-        switch (pool) {
-            case PoolType.Laser:
-                requestedPool = _laserPool;
-                break;
-            case PoolType.Enemy:
-                requestedPool = _enemyPool;
-                break;
-        }
+        List<GameObject> requestedPool = IdentifyPool(pool);
 
         for (int i = 0; i < requestedPool.Count; i++) {
             if (!requestedPool[i].activeInHierarchy) {
@@ -89,21 +81,42 @@ public class PoolManager : MonoBehaviour
         }
 
         // If no remaining inactive pool members
+        return AddToPool(position, pool, requestedPool);
+    }
+
+    List<GameObject> IdentifyPool(PoolType pool) {
+
+        switch (pool) {
+            case PoolType.Laser:
+                return _laserPool;
+            case PoolType.Enemy:
+                return _enemyPool;
+            default:
+                Debug.LogWarning("Placeholder for null return from PoolManager.IdentifyPool()");
+                return null;
+        }
+    }
+
+    GameObject AddToPool(Vector3 position, PoolType pool, List<GameObject> requestedPool) {
+
         GameObject newMember;
 
         switch (pool) {
+
             case PoolType.Laser:
                 newMember = GenerateNewPoolMember(_laserPrefab, _laserParent, position);
                 requestedPool.Add(newMember);
                 _laserPool = requestedPool;
                 return newMember;
+
             case PoolType.Enemy:
                 newMember = GenerateNewPoolMember(_enemyPrefab, _enemyParent, position);
                 requestedPool.Add(newMember);
                 _enemyPool = requestedPool;
                 return newMember;
+
             default:
-                Debug.LogError("Pools Empty");
+                Debug.LogWarning("Placeholder for null return from PoolManager.AddToPool()");
                 return null;
         }
     }
