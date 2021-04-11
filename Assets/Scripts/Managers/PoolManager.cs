@@ -38,6 +38,9 @@ public class PoolManager : MonoBehaviour
     private List<GameObject> _laserPool;
     private List<GameObject> _enemyPool;
 
+    // When adding a new pool type remember to add new pool type to enum PoolType, IdentifyPool method
+    // and AddToPool method. Create the pool in the Start method.
+
     private void Awake() {
         _instance = this;
     }
@@ -51,8 +54,7 @@ public class PoolManager : MonoBehaviour
 
         List<GameObject> generatedPool = new List<GameObject>();
         for (int i = 0; i < count; i++) {
-            GameObject newObj = Instantiate(prefab);
-            newObj.transform.parent = parent;
+            GameObject newObj = Instantiate(prefab, Vector3.zero, Quaternion.identity, parent);
             newObj.SetActive(false);
             generatedPool.Add(newObj);
         }
@@ -60,23 +62,21 @@ public class PoolManager : MonoBehaviour
         return generatedPool;
     }
 
-    GameObject GenerateNewPoolMember(GameObject prefab, Transform parent, Vector3 position) {
-
-        GameObject obj = Instantiate(prefab);
-        obj.transform.parent = parent;
-        obj.transform.position = position;
-        return obj;
-    }
-
     public GameObject RequestPoolMember(Vector3 position, PoolType pool) {
 
         List<GameObject> requestedPool = IdentifyPool(pool);
 
-        for (int i = 0; i < requestedPool.Count; i++) {
-            if (!requestedPool[i].activeInHierarchy) {
-                requestedPool[i].SetActive(true);
-                requestedPool[i].transform.position = position;
-                return requestedPool[i];
+        if (requestedPool == null) {
+            Debug.LogError("Pool " + pool + " not found!");
+            return null;
+        }
+        else {
+            for (int i = 0; i < requestedPool.Count; i++) {
+                if (!requestedPool[i].activeInHierarchy) {
+                    requestedPool[i].SetActive(true);
+                    requestedPool[i].transform.position = position;
+                    return requestedPool[i];
+                }
             }
         }
 
@@ -121,7 +121,15 @@ public class PoolManager : MonoBehaviour
         }
     }
 
+    GameObject GenerateNewPoolMember(GameObject prefab, Transform parent, Vector3 position) {
+
+        GameObject obj = Instantiate(prefab, Vector3.zero, Quaternion.identity, parent);
+        obj.transform.position = position;
+        return obj;
+    }
+
     public void ReturnPoolMember(GameObject obj) {
+        obj.transform.position = Vector3.zero;
         obj.SetActive(false);
     }
 }

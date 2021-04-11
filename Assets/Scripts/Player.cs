@@ -117,7 +117,6 @@ public class Player : MonoBehaviour
         Vector3 laserSpawn = transform.position;
         laserSpawn.y += _laserSpawnYOffset;
 
-        //Instantiate(_laserPrefab, laserSpawn, Quaternion.identity);
         PoolManager.Instance.RequestPoolMember(laserSpawn, PoolManager.PoolType.Laser);
     }
 
@@ -132,8 +131,7 @@ public class Player : MonoBehaviour
 
     private void OnTriggerEnter(Collider other) {
 
-        other.TryGetComponent<Enemy>(out Enemy enemy);
-        if (enemy != null) {
+        if (other.TryGetComponent<Enemy>(out Enemy enemy)) {
             enemy.Damage();
             Damage();
         }

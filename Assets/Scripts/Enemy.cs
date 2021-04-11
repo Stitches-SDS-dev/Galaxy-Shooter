@@ -35,6 +35,6 @@ public class Enemy : MonoBehaviour
     }
 
     public void Damage() {
-        Destroy(this.gameObject);
+        PoolManager.Instance.ReturnPoolMember(this.gameObject);
     }
 }

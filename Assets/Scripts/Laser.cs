@@ -19,9 +19,8 @@ public class Laser : MonoBehaviour
 
     private void OnTriggerEnter(Collider other) {
 
-        other.TryGetComponent<Enemy>(out Enemy enemy);
-        if (enemy != null) {
-            Destroy(other.gameObject);
+        if (other.TryGetComponent<Enemy>(out Enemy enemy)) { 
+            enemy.Damage();
             StartCoroutine(ReturnToPool());
         }
     }
