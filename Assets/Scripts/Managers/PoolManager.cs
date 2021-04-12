@@ -16,7 +16,8 @@ public class PoolManager : MonoBehaviour
 
     public enum PoolType {
         Laser,
-        Enemy
+        Enemy,
+        TripleShot
     }
 
     [Header("Laser Pool Settings")]
@@ -131,5 +132,20 @@ public class PoolManager : MonoBehaviour
     public void ReturnPoolMember(GameObject obj) {
         obj.transform.position = Vector3.zero;
         obj.SetActive(false);
+    }
+
+    struct PoolInfo {
+
+        GameObject prefab;
+        Transform parent;
+        PoolType poolType;
+        int initalPoolSize;
+
+        public PoolInfo(GameObject prefab, Transform parent, PoolType poolType, int initalPoolSize) {
+            this.prefab = prefab;
+            this.parent = parent;
+            this.poolType = poolType;
+            this.initalPoolSize = initalPoolSize;
+        }
     }
 }

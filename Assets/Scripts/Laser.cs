@@ -9,15 +9,23 @@ public class Laser : MonoBehaviour
     [SerializeField]
     [Tooltip("Default: 7f")]
     private float _offScreenYPos;
+    [SerializeField]
+    private bool _hasParent;
 
     private void Update() {
         transform.Translate(Vector3.up * _speed * Time.deltaTime);
 
-        if (transform.position.y >= _offScreenYPos)
-            PoolManager.Instance.ReturnPoolMember(this.gameObject);
+        if (transform.position.y >= _offScreenYPos) {
+            if (_hasParent) {
+                Destroy(this.transform.parent.gameObject);
+            }
+            else {
+                PoolManager.Instance.ReturnPoolMember(this.gameObject);
+            }
+        }
     }
 
-    private void OnTriggerEnter(Collider other) {
+    private void OnTriggerEnter2D(Collider2D other) {
 
         if (other.TryGetComponent<Enemy>(out Enemy enemy)) { 
             enemy.Damage();
@@ -26,7 +34,13 @@ public class Laser : MonoBehaviour
     }
 
     IEnumerator ReturnToPool() {
+
         yield return new WaitForSeconds(0.1f);
-        PoolManager.Instance.ReturnPoolMember(this.gameObject);
+        if (_hasParent) {
+            Destroy(this.gameObject);
+        }
+        else {
+            PoolManager.Instance.ReturnPoolMember(this.gameObject);
+        }
     }
 }

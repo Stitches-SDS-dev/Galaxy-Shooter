@@ -14,8 +14,29 @@ public class SpawnManager : MonoBehaviour
     [SerializeField]
     private float _minEnemySpawnTime, _maxEnemySpawnTime;
 
+    [Header("Powerup Spawn Settings")]
+    [SerializeField]
+    private bool _spawnPowerups = true;
+    [SerializeField]
+    private GameObject[] _powerupPrefab;
+    [SerializeField]
+    private float _powerupSpawnY;
+    [SerializeField]
+    private float _powerupMinSpawnX, _powerupMaxSpawnX;
+    [SerializeField]
+    private float _minPowerupSpawnTime, _maxPowerupSpawnTime;
+
     private void Start() {
         StartCoroutine(SpawnEnemies());
+        StartCoroutine(SpawnPowerups());
+    }
+
+    private void OnEnable() {
+        Player.OnPlayerDeath += OnPlayerDeath;
+    }
+
+    private void OnDisable() {
+        Player.OnPlayerDeath -= OnPlayerDeath;
     }
 
     IEnumerator SpawnEnemies() {
@@ -32,5 +53,29 @@ public class SpawnManager : MonoBehaviour
 
             PoolManager.Instance.RequestPoolMember(enemySpawn, PoolManager.PoolType.Enemy);
         }
+    }
+
+    IEnumerator SpawnPowerups() {
+
+        Vector3 powerupSpawn = new Vector3(0, 0, 0);
+        float powerupSpawnX;
+        int powerupIndex;
+
+        while (_spawnPowerups) {
+
+            yield return new WaitForSeconds(Random.Range(_minPowerupSpawnTime, _maxPowerupSpawnTime));
+
+            powerupSpawnX = Random.Range(_powerupMinSpawnX, _powerupMaxSpawnX);
+            powerupSpawn.Set(powerupSpawnX, _powerupSpawnY, 0);
+
+            powerupIndex = Random.Range(0, 3);
+
+            Instantiate(_powerupPrefab[powerupIndex], powerupSpawn, Quaternion.identity, this.transform);
+        }
+    }
+
+    void OnPlayerDeath() {
+        _spawnEnemies = false;
+        _spawnPowerups = false;
     }
 }
