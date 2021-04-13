@@ -16,8 +16,7 @@ public class PoolManager : MonoBehaviour
 
     public enum PoolType {
         Laser,
-        Enemy,
-        TripleShot
+        Enemy
     }
 
     [Header("Laser Pool Settings")]
@@ -39,7 +38,7 @@ public class PoolManager : MonoBehaviour
     private List<GameObject> _laserPool;
     private List<GameObject> _enemyPool;
 
-    // When adding a new pool type remember to add new pool type to enum PoolType, IdentifyPool method
+    // When adding a new pool type, remember to add new pool type to enum PoolType, IdentifyPool method
     // and AddToPool method. Create the pool in the Start method.
 
     private void Awake() {

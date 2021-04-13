@@ -68,7 +68,7 @@ public class SpawnManager : MonoBehaviour
             powerupSpawnX = Random.Range(_powerupMinSpawnX, _powerupMaxSpawnX);
             powerupSpawn.Set(powerupSpawnX, _powerupSpawnY, 0);
 
-            powerupIndex = Random.Range(0, 3);
+            powerupIndex = Random.Range(0, _powerupPrefab.Length);
 
             Instantiate(_powerupPrefab[powerupIndex], powerupSpawn, Quaternion.identity, this.transform);
         }

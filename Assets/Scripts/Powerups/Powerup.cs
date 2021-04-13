@@ -7,13 +7,13 @@ public class Powerup : MonoBehaviour
     [SerializeField]
     private PowerupType _type;
     [SerializeField]
-    private float _speed;
-    [SerializeField]
     private float _cooldownDuration;
+    [SerializeField]
+    private float _bonusEffectValue;
     [SerializeField]
     private float _offScreenYPos;
     [SerializeField]
-    private float _bonusEffectValue;
+    private float _speed;
 
     public enum PowerupType {
         TripleShot,

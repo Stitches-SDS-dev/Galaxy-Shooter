@@ -35,11 +35,17 @@ public class Player : MonoBehaviour
     [SerializeField]
     private bool _isSpeedBoostActive;
     [SerializeField]
+    [Tooltip("Too adjust boost multiplier, edit the bonus value of the SpeedBoost powerup. Default: 1.")]
     private float _speedMultiplier = 1;
 
     [Header("Shield Settings")]
     [SerializeField]
     private bool _isShieldActive;
+    [SerializeField]
+    private GameObject _shieldGameObject;
+    [SerializeField]
+    [Tooltip("To adjust shield bonus power, edit the bonus value of the Shield powerup.")]
+    private int _shieldPower = 0;
 
     [Header("Player Boundary Settings")]
     [SerializeField]
@@ -154,11 +160,20 @@ public class Player : MonoBehaviour
 
     public void Damage() {
 
-        _lives--;
-        if (_lives <= 0) {
+        if (_shieldPower > 0) {
+            _shieldPower--;
+            if (_shieldPower <= 0) {
+                _isShieldActive = false;
+                _shieldGameObject.SetActive(false);
+            }
+        }
+        else {
+            _lives--;
+            if (_lives <= 0) {
 
-            Debug.Log("Game Over bro!");
-            PlayerDeath();
+                Debug.Log("Game Over bro!");
+                PlayerDeath();
+            }
         }
     }
 
@@ -172,7 +187,7 @@ public class Player : MonoBehaviour
 
     #region --- Powerup Management ---
 
-    // All activation / deactivation instructions regarding powerups
+    // All activation / deactivation / query instructions regarding powerups
 
     public void ToggleTripleShot() {
         _isTripleShotActive = !_isTripleShotActive;
@@ -187,8 +202,13 @@ public class Player : MonoBehaviour
         }
     }
 
-    public void ToggleShield() {
-        Debug.Log("Shield Activated");
+    public void ToggleShield(int bonus) {
+        _isShieldActive = !_isShieldActive;
+        if (_isShieldActive) {
+            _shieldPower += bonus;
+            _shieldGameObject.SetActive(true);
+            Debug.Log("Shield Activated");
+        }
     }
 
     public bool TripleShotStatus() {
