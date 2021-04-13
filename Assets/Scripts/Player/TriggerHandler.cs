@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
+[RequireComponent(typeof(Player))]
 public class TriggerHandler : MonoBehaviour
 {
     [SerializeField]

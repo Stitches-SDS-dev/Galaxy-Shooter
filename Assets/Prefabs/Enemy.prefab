@@ -123,6 +123,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _speed: 3
+  _value: 10
   _offSceenYPos: -5.4
   _spawnYPos: 7.5
   _minXSpawn: -9

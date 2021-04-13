@@ -48,6 +48,10 @@ public class SpawnManager : MonoBehaviour
 
             yield return new WaitForSeconds(Random.Range(_minEnemySpawnTime, _maxEnemySpawnTime));
 
+            if (!_spawnEnemies) {
+                break;
+            }
+
             enemySpawnX = Random.Range(_enemyMinSpawnX, _enemyMaxSpawnX);
             enemySpawn.Set(enemySpawnX, _enemySpawnY, 0);
 
@@ -64,6 +68,10 @@ public class SpawnManager : MonoBehaviour
         while (_spawnPowerups) {
 
             yield return new WaitForSeconds(Random.Range(_minPowerupSpawnTime, _maxPowerupSpawnTime));
+
+            if (!_spawnPowerups) {
+                break;
+            }
 
             powerupSpawnX = Random.Range(_powerupMinSpawnX, _powerupMaxSpawnX);
             powerupSpawn.Set(powerupSpawnX, _powerupSpawnY, 0);

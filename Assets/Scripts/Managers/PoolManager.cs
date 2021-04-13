@@ -135,6 +135,8 @@ public class PoolManager : MonoBehaviour
 
     struct PoolInfo {
 
+        // Potential future implementation
+
         GameObject prefab;
         Transform parent;
         PoolType poolType;

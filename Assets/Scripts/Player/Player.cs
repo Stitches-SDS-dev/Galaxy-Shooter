@@ -11,7 +11,23 @@ public class Player : MonoBehaviour
     [SerializeField]
     private float _speed;
     [SerializeField]
+    private int _score = 0;
+    [SerializeField]
     private int _lives;
+
+    [Header("Player Boundary Settings")]
+    [SerializeField]
+    [Tooltip("If false will wrap at left edge")]
+    private bool _bindLeft;
+    [SerializeField]
+    [Tooltip("If false will wrap at right edge")]
+    private bool _bindRight;
+    [SerializeField]
+    private float _leftBindX, _rightBindX;
+    [SerializeField]
+    private float _leftWrapX, _rightWrapX;
+    [SerializeField]
+    private float _lowerBindY, _upperBindY;
 
     [Header("Laser Settings")]
     [SerializeField]
@@ -47,24 +63,20 @@ public class Player : MonoBehaviour
     [Tooltip("To adjust shield bonus power, edit the bonus value of the Shield powerup.")]
     private int _shieldPower = 0;
 
-    [Header("Player Boundary Settings")]
-    [SerializeField]
-    [Tooltip("If false will wrap at left edge")]
-    private bool _bindLeft;
-    [SerializeField]
-    [Tooltip("If false will wrap at right edge")]
-    private bool _bindRight;
-    [SerializeField]
-    private float _leftBindX, _rightBindX;
-    [SerializeField]
-    private float _leftWrapX, _rightWrapX;
-    [SerializeField]
-    private float _lowerBindY, _upperBindY;
-
     public static Action OnPlayerDeath;
+    public static Action<int> OnScoreChange;
+    public static Action<int> OnLivesChanged;
 
     private void Start() {
         transform.position = new Vector3(0, _lowerBindY, 0);
+    }
+
+    private void OnEnable() {
+        Enemy.OnEnemyDeath += IncreaseScore;
+    }
+
+    private void OnDisable() {
+        Enemy.OnEnemyDeath -= IncreaseScore;
     }
 
     private void Update() {
@@ -156,7 +168,12 @@ public class Player : MonoBehaviour
 
     #endregion
 
-    #region --- Life Management ---
+    #region --- Player Info Management ---
+
+    void IncreaseScore(int value) {
+        _score += value;
+        OnScoreChange?.Invoke(_score);
+    }
 
     public void Damage() {
 
@@ -169,6 +186,7 @@ public class Player : MonoBehaviour
         }
         else {
             _lives--;
+            OnLivesChanged?.Invoke(_lives);
             if (_lives <= 0) {
 
                 Debug.Log("Game Over bro!");
@@ -207,7 +225,6 @@ public class Player : MonoBehaviour
         if (_isShieldActive) {
             _shieldPower += bonus;
             _shieldGameObject.SetActive(true);
-            Debug.Log("Shield Activated");
         }
     }
 
