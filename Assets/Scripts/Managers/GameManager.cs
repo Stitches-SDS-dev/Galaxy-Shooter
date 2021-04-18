@@ -25,6 +25,10 @@ public class GameManager : MonoBehaviour
                 SceneManager.LoadScene(0); // Menu Scene
             }
         }
+
+        if (Input.GetKeyDown(KeyCode.Escape)) {
+            Application.Quit();
+        }
     }
 
     void OnGameOver() {

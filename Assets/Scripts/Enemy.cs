@@ -15,6 +15,10 @@ public class Enemy : MonoBehaviour
     private float _delayBeforeFiring;
     [SerializeField]
     private float _laserYOffset;
+    [SerializeField]
+    private float minFireRate;
+    [SerializeField]
+    private float maxFireRate;
     private WaitForSeconds _preFireDelay;
 
     [SerializeField]
@@ -86,7 +90,7 @@ public class Enemy : MonoBehaviour
             laserSpawn.y += _laserYOffset;
             Instantiate(_laserPrefab, laserSpawn, Quaternion.identity);
             
-            yield return new WaitForSeconds(UnityEngine.Random.Range(2f, 6f));
+            yield return new WaitForSeconds(UnityEngine.Random.Range(minFireRate, maxFireRate));
         }
     }
 }

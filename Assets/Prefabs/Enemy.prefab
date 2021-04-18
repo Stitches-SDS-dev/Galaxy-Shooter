@@ -127,6 +127,8 @@ MonoBehaviour:
   _laserPrefab: {fileID: 2556079205675095563, guid: d5c79be247a627c4eb4372886af5440b, type: 3}
   _delayBeforeFiring: 0.5
   _laserYOffset: -0.5
+  minFireRate: 1.5
+  maxFireRate: 5
   _offSceenYPos: -5.4
   _collider: {fileID: 6445659860631732620}
   _spawnYPos: 7.5
