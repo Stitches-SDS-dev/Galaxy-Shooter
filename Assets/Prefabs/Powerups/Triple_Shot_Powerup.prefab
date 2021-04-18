@@ -142,7 +142,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c1744a27fb1f0c94dbfa9194ca807e2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 0
-  _speed: 1
+  _type: 0
+  _sFX: {fileID: 8300000, guid: 5ee343246919d2b4bba63ae629e95494, type: 3}
   _cooldownDuration: 5
+  _bonusEffectValue: 0
   _offScreenYPos: -5.75
+  _speed: 1

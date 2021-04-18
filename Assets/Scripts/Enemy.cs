@@ -60,14 +60,11 @@ public class Enemy : MonoBehaviour
         _collider.enabled = false;
         _exploding = true;
         PoolManager.Instance.RequestPoolMember(transform.position, PoolManager.PoolType.Explosion);
-        //_anim.SetTrigger("Explode");
 
         OnEnemyDeath?.Invoke(_value);
 
         yield return new WaitForSeconds(0.5f);
 
-        // Reset the sprite ready to be recycled
-        //_renderer.sprite = _defaultSprite;
         PoolManager.Instance.ReturnPoolMember(this.gameObject);
     }
 }

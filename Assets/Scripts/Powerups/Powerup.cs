@@ -7,6 +7,8 @@ public class Powerup : MonoBehaviour
     [SerializeField]
     private PowerupType _type;
     [SerializeField]
+    private AudioClip _sFX;
+    [SerializeField]
     private float _cooldownDuration;
     [SerializeField]
     private float _bonusEffectValue;
@@ -39,5 +41,9 @@ public class Powerup : MonoBehaviour
 
     public float GetBonusValue() {
         return _bonusEffectValue;
+    }
+
+    public void PlaySFX() {
+        AudioManager.Instance.PlayClip(_sFX);
     }
 }

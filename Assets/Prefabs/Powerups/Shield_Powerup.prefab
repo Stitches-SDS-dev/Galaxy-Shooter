@@ -143,6 +143,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _type: 2
+  _sFX: {fileID: 8300000, guid: 5ee343246919d2b4bba63ae629e95494, type: 3}
   _cooldownDuration: 0
   _bonusEffectValue: 3
   _offScreenYPos: -5.75

@@ -21,22 +21,25 @@ public class TriggerHandler : MonoBehaviour
 
             Powerup.PowerupType type = powerup.GetPowerupType();
             float duration = powerup.GetDuration();
-            float bonus = powerup.GetBonusValue();
+            float bonus = powerup.GetBonusValue();         
 
-            PowerupSelection(type, other.gameObject, duration, bonus);
+            PowerupSelection(type, powerup, duration, bonus);
         }
     }
 
-    void PowerupSelection(Powerup.PowerupType type, GameObject powerup, float duration, float bonus) {
+    void PowerupSelection(Powerup.PowerupType type, Powerup powerup, float duration, float bonus) {
 
         // Activate appropriate functionality dependant on PowerupType
-
+        
         switch (type) {
             case Powerup.PowerupType.TripleShot:
 
                 if (!_player.TripleShotStatus()) {
+
+                    powerup.PlaySFX();
                     _player.ToggleTripleShot();
-                    Destroy(powerup);
+                    Destroy(powerup.gameObject);
+
                     StartCoroutine(PowerupCooldown(duration, () => {
                         _player.ToggleTripleShot();
                     }));
@@ -46,8 +49,11 @@ public class TriggerHandler : MonoBehaviour
             case Powerup.PowerupType.SpeedBoost:
 
                 if (!_player.SpeedBoostStatus()) {
+
+                    powerup.PlaySFX();
                     _player.ToggleSpeedBoost(bonus);
-                    Destroy(powerup);
+                    Destroy(powerup.gameObject);
+
                     StartCoroutine(PowerupCooldown(duration, () => {
                         _player.ToggleSpeedBoost(bonus);
                     }));
@@ -57,8 +63,11 @@ public class TriggerHandler : MonoBehaviour
             case Powerup.PowerupType.Shield:
 
                 if (!_player.ShieldStatus()) {
+
+                    powerup.PlaySFX();
                     _player.ToggleShield((int)bonus);
-                    Destroy(powerup);
+                    Destroy(powerup.gameObject);
+
                     // Shield depletes with damage so no cooldown required
                 }
                 break;
