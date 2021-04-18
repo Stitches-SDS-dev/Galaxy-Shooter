@@ -181,21 +181,24 @@ public class Player : MonoBehaviour
 
     public void Damage() {
 
-        if (_shieldPower > 0) {
-            _shieldPower--;
-            if (_shieldPower <= 0) {
-                _isShieldActive = false;
-                _shieldGameObject.SetActive(false);
-            }
-        }
-        else {
-            _lives--;
-            DisplayDamage();
-            OnLivesChanged?.Invoke(_lives);
-            if (_lives <= 0) {
+        if (_lives > 0) {
 
-                Debug.Log("Game Over bro!");
-                PlayerDeath();
+            if (_shieldPower > 0) {
+                _shieldPower--;
+                if (_shieldPower <= 0) {
+                    _isShieldActive = false;
+                    _shieldGameObject.SetActive(false);
+                }
+            }
+            else {
+                _lives--;
+                DisplayDamage();
+                OnLivesChanged?.Invoke(_lives);
+                if (_lives <= 0) {
+
+                    Debug.Log("Game Over bro!");
+                    PlayerDeath();
+                }
             }
         }
     }

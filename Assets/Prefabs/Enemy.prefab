@@ -122,12 +122,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 114ea0de65ce6a2438d9a32734c45f2a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _defaultSprite: {fileID: 21300000, guid: 3154912113cbb4a498df6f571c74e18c, type: 3}
-  _renderer: {fileID: 8567736763254834091}
   _speed: 3
   _value: 10
+  _laserPrefab: {fileID: 2556079205675095563, guid: d5c79be247a627c4eb4372886af5440b, type: 3}
+  _delayBeforeFiring: 0.5
+  _laserYOffset: -0.5
   _offSceenYPos: -5.4
+  _collider: {fileID: 6445659860631732620}
   _spawnYPos: 7.5
   _minXSpawn: -9
   _maxXSpawn: 9
-  _collider: {fileID: 6445659860631732620}

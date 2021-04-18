@@ -22,12 +22,13 @@ public class Asteroid : MonoBehaviour
 
     public void Destroyed() {
 
-        TryGetComponent<BoxCollider2D>(out BoxCollider2D collider);
-        if (collider != null)
-            collider.enabled = false;
+        if (TryGetComponent<Collider2D>(out Collider2D collider)) {
 
-        PoolManager.Instance.RequestPoolMember(transform.position, PoolManager.PoolType.Explosion);
-        OnAsteroidDestruction?.Invoke();
-        Destroy(this.gameObject, 0.5f);
+            collider.enabled = false;
+            PoolManager.Instance.RequestPoolMember(transform.position, PoolManager.PoolType.Explosion);
+
+            OnAsteroidDestruction?.Invoke();
+            Destroy(this.gameObject, 0.5f);
+        }
     }
 }

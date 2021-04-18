@@ -6,17 +6,24 @@ using System;
 public class Enemy : MonoBehaviour
 {
     [SerializeField]
-    private Sprite _defaultSprite;
-    [SerializeField]
-    private SpriteRenderer _renderer;
-    [SerializeField]
     private float _speed;
     [SerializeField]
     private int _value;
+    [SerializeField]
+    private GameObject _laserPrefab;
+    [SerializeField]
+    private float _delayBeforeFiring;
+    [SerializeField]
+    private float _laserYOffset;
+    private WaitForSeconds _preFireDelay;
 
     [SerializeField]
     [Tooltip("Default: -5.4")]
     private float _offSceenYPos;
+
+    [SerializeField]
+    private BoxCollider2D _collider;
+    private bool _exploding;
 
     [Header("Spawn Parameters")]
     [SerializeField]
@@ -25,13 +32,14 @@ public class Enemy : MonoBehaviour
     [SerializeField]
     private float _minXSpawn, _maxXSpawn;
 
-    //[SerializeField]
-    //private Animator _anim;
-    [SerializeField]
-    private BoxCollider2D _collider;
-    private bool _exploding;
+    
 
     public static Action<int> OnEnemyDeath;
+
+    private void OnEnable() {
+        _preFireDelay = new WaitForSeconds(_delayBeforeFiring);
+        StartCoroutine(FiringRoutine());
+    }
 
     private void Update() {
         transform.Translate(Vector3.down * _speed * Time.deltaTime);
@@ -66,5 +74,19 @@ public class Enemy : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
 
         PoolManager.Instance.ReturnPoolMember(this.gameObject);
+    }
+
+    IEnumerator FiringRoutine() {
+
+        yield return _preFireDelay;
+
+        while (isActiveAndEnabled) {
+
+            Vector3 laserSpawn = transform.position;
+            laserSpawn.y += _laserYOffset;
+            Instantiate(_laserPrefab, laserSpawn, Quaternion.identity);
+            
+            yield return new WaitForSeconds(UnityEngine.Random.Range(2f, 6f));
+        }
     }
 }
