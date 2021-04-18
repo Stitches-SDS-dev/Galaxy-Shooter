@@ -18,48 +18,54 @@ public class TriggerHandler : MonoBehaviour
             _player.Damage();
         }
         else if (other.TryGetComponent<Powerup>(out Powerup powerup)) {
-            // Activate appropriate functionality dependant on PowerupType
 
             Powerup.PowerupType type = powerup.GetPowerupType();
             float duration = powerup.GetDuration();
             float bonus = powerup.GetBonusValue();
 
-            switch (type) {
-                case Powerup.PowerupType.TripleShot:
+            PowerupSelection(type, other.gameObject, duration, bonus);
+        }
+    }
 
-                    if (!_player.TripleShotStatus()) {
+    void PowerupSelection(Powerup.PowerupType type, GameObject powerup, float duration, float bonus) {
+
+        // Activate appropriate functionality dependant on PowerupType
+
+        switch (type) {
+            case Powerup.PowerupType.TripleShot:
+
+                if (!_player.TripleShotStatus()) {
+                    _player.ToggleTripleShot();
+                    Destroy(powerup);
+                    StartCoroutine(PowerupCooldown(duration, () => {
                         _player.ToggleTripleShot();
-                        Destroy(other.gameObject);
-                        StartCoroutine(PowerupCooldown(duration, () => {
-                            _player.ToggleTripleShot();
-                        }));
-                    }
-                    break;
+                    }));
+                }
+                break;
 
-                case Powerup.PowerupType.SpeedBoost:
+            case Powerup.PowerupType.SpeedBoost:
 
-                    if (!_player.SpeedBoostStatus()) {
+                if (!_player.SpeedBoostStatus()) {
+                    _player.ToggleSpeedBoost(bonus);
+                    Destroy(powerup);
+                    StartCoroutine(PowerupCooldown(duration, () => {
                         _player.ToggleSpeedBoost(bonus);
-                        Destroy(other.gameObject);
-                        StartCoroutine(PowerupCooldown(duration, () => {
-                            _player.ToggleSpeedBoost(bonus);
-                        }));
-                    }
-                    break;
+                    }));
+                }
+                break;
 
-                case Powerup.PowerupType.Shield:
+            case Powerup.PowerupType.Shield:
 
-                    if (!_player.ShieldStatus()) {
-                        _player.ToggleShield((int)bonus);
-                        Destroy(other.gameObject);
-                        // Shield depletes with damage so no cooldown required
-                    }
-                    break;
+                if (!_player.ShieldStatus()) {
+                    _player.ToggleShield((int)bonus);
+                    Destroy(powerup);
+                    // Shield depletes with damage so no cooldown required
+                }
+                break;
 
-                default:
-                    Debug.Log("No such Powerup: " + type);
-                    break;
-            }
+            default:
+                Debug.Log("No such Powerup: " + type);
+                break;
         }
     }
 

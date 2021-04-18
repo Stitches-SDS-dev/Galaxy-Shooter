@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System;
 
 public class UIManager : MonoBehaviour
 {
@@ -20,12 +21,16 @@ public class UIManager : MonoBehaviour
     private int _flashCount;
     [SerializeField]
     private TMP_Text _restartText;
+    [SerializeField]
+    private TMP_Text _menuText;
 
     [Header("Lives Display")]
     [SerializeField]
     private Image _livesImage;
     [SerializeField]
     private Sprite[] _livesImages;
+
+    public static Action OnGameOver;
 
     private void OnEnable() {
         Player.OnScoreChange += UpdateScoreDisplay;
@@ -82,6 +87,9 @@ public class UIManager : MonoBehaviour
                 flashGameOver = false;
             }
         }
+
         _restartText.enabled = true;
+        _menuText.enabled = true;
+        OnGameOver?.Invoke();
     }
 }

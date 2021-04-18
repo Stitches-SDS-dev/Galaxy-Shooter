@@ -5,23 +5,29 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    private bool _isPlayerAlive = true;
+    private bool _isGameOver;
 
     private void OnEnable() {
-        Player.OnPlayerDeath += OnPlayerDeath;
+        UIManager.OnGameOver += OnGameOver;
     }
 
     private void OnDisable() {
-        Player.OnPlayerDeath -= OnPlayerDeath;
+        UIManager.OnGameOver -= OnGameOver;
     }
 
     private void Update() {
-        if (Input.GetKeyDown(KeyCode.R) && !_isPlayerAlive) {
-            SceneManager.LoadScene(0);
+
+        if (_isGameOver) {
+            if (Input.GetKeyDown(KeyCode.R)) {
+                SceneManager.LoadScene(1); // Game Scene
+            }
+            if (Input.GetKeyDown(KeyCode.M)) {
+                SceneManager.LoadScene(0); // Menu Scene
+            }
         }
     }
 
-    void OnPlayerDeath() {
-        _isPlayerAlive = false;
+    void OnGameOver() {
+        _isGameOver = true;
     }
 }

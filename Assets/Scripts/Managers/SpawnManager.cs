@@ -6,7 +6,7 @@ public class SpawnManager : MonoBehaviour
 {
     [Header("Enemy Spawn Settings")]
     [SerializeField]
-    private bool _spawnEnemies = true;
+    private bool _spawnEnemies;
     [SerializeField]
     private float _enemySpawnY;
     [SerializeField]
@@ -16,9 +16,9 @@ public class SpawnManager : MonoBehaviour
 
     [Header("Powerup Spawn Settings")]
     [SerializeField]
-    private bool _spawnPowerups = true;
+    private bool _spawnPowerups;
     [SerializeField]
-    private GameObject[] _powerupPrefab;
+    private GameObject[] _powerupPrefabs;
     [SerializeField]
     private float _powerupSpawnY;
     [SerializeField]
@@ -26,17 +26,22 @@ public class SpawnManager : MonoBehaviour
     [SerializeField]
     private float _minPowerupSpawnTime, _maxPowerupSpawnTime;
 
-    private void Start() {
-        StartCoroutine(SpawnEnemies());
-        StartCoroutine(SpawnPowerups());
-    }
-
     private void OnEnable() {
         Player.OnPlayerDeath += OnPlayerDeath;
+        Asteroid.OnAsteroidDestruction += StartSpawning;
     }
 
     private void OnDisable() {
         Player.OnPlayerDeath -= OnPlayerDeath;
+        Asteroid.OnAsteroidDestruction -= StartSpawning;
+    }
+
+    void StartSpawning() {
+
+        _spawnEnemies = _spawnPowerups = true;
+
+        StartCoroutine(SpawnEnemies());
+        StartCoroutine(SpawnPowerups());
     }
 
     IEnumerator SpawnEnemies() {
@@ -76,14 +81,13 @@ public class SpawnManager : MonoBehaviour
             powerupSpawnX = Random.Range(_powerupMinSpawnX, _powerupMaxSpawnX);
             powerupSpawn.Set(powerupSpawnX, _powerupSpawnY, 0);
 
-            powerupIndex = Random.Range(0, _powerupPrefab.Length);
+            powerupIndex = Random.Range(0, _powerupPrefabs.Length);
 
-            Instantiate(_powerupPrefab[powerupIndex], powerupSpawn, Quaternion.identity, this.transform);
+            Instantiate(_powerupPrefabs[powerupIndex], powerupSpawn, Quaternion.identity, this.transform);
         }
     }
 
     void OnPlayerDeath() {
-        _spawnEnemies = false;
-        _spawnPowerups = false;
+        _spawnEnemies = _spawnPowerups = false;
     }
 }

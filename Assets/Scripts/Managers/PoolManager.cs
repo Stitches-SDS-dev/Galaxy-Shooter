@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class PoolManager : MonoBehaviour
 {
@@ -16,7 +17,8 @@ public class PoolManager : MonoBehaviour
 
     public enum PoolType {
         Laser,
-        Enemy
+        Enemy,
+        Explosion
     }
 
     [Header("Laser Pool Settings")]
@@ -35,8 +37,19 @@ public class PoolManager : MonoBehaviour
     [SerializeField]
     private int _initialEnemyPoolSize;
 
+    [Header("Explosion Pool Settings")]
+    [SerializeField]
+    private GameObject _explosionPrefab;
+    [SerializeField]
+    private Transform _explosionParent;
+    [SerializeField]
+    private int _initialExplosionPoolSize;
+
     private List<GameObject> _laserPool;
     private List<GameObject> _enemyPool;
+    private List<GameObject> _explosionPool;
+
+    public static Action OnPoolMemberCreated;
 
     // When adding a new pool type, remember to add new pool type to enum PoolType, IdentifyPool method
     // and AddToPool method. Create the pool in the Start method.
@@ -46,8 +59,10 @@ public class PoolManager : MonoBehaviour
     }
 
     private void Start() {
+
         _laserPool = GeneratePool(_laserPrefab, _laserParent, _initialLaserPoolSize);
         _enemyPool = GeneratePool(_enemyPrefab, _enemyParent, _initialEnemyPoolSize);
+        _explosionPool = GeneratePool(_explosionPrefab, _explosionParent, _initialExplosionPoolSize);                
     }
 
     List<GameObject> GeneratePool(GameObject prefab, Transform parent, int count) {
@@ -55,6 +70,7 @@ public class PoolManager : MonoBehaviour
         List<GameObject> generatedPool = new List<GameObject>();
         for (int i = 0; i < count; i++) {
             GameObject newObj = Instantiate(prefab, Vector3.zero, Quaternion.identity, parent);
+            OnPoolMemberCreated?.Invoke();
             newObj.SetActive(false);
             generatedPool.Add(newObj);
         }
@@ -91,8 +107,10 @@ public class PoolManager : MonoBehaviour
                 return _laserPool;
             case PoolType.Enemy:
                 return _enemyPool;
+            case PoolType.Explosion:
+                return _explosionPool;
             default:
-                Debug.LogWarning("Placeholder for null return from PoolManager.IdentifyPool()");
+                Debug.LogWarning("Placeholder for null return from PoolManager::IdentifyPool()");
                 return null;
         }
     }
@@ -115,8 +133,14 @@ public class PoolManager : MonoBehaviour
                 _enemyPool = requestedPool;
                 return newMember;
 
+            case PoolType.Explosion:
+                newMember = GenerateNewPoolMember(_explosionPrefab, _explosionParent, position);
+                requestedPool.Add(newMember);
+                _explosionPool = requestedPool;
+                return newMember;
+
             default:
-                Debug.LogWarning("Placeholder for null return from PoolManager.AddToPool()");
+                Debug.LogWarning("Placeholder for null return from PoolManager::AddToPool()");
                 return null;
         }
     }
@@ -129,6 +153,12 @@ public class PoolManager : MonoBehaviour
     }
 
     public void ReturnPoolMember(GameObject obj) {
+
+        if (obj.TryGetComponent<BoxCollider2D>(out BoxCollider2D collider) && !collider.enabled) {
+            // Reactivate any disabled collider after destruction routine.
+            collider.enabled = true;
+        }
+
         obj.transform.position = Vector3.zero;
         obj.SetActive(false);
     }

@@ -15,6 +15,10 @@ public class Player : MonoBehaviour
     [SerializeField]
     private int _lives;
 
+    [Header("Ship Settings")]
+    [SerializeField]
+    private GameObject[] _engineFires;
+
     [Header("Player Boundary Settings")]
     [SerializeField]
     [Tooltip("If false will wrap at left edge")]
@@ -51,7 +55,7 @@ public class Player : MonoBehaviour
     [SerializeField]
     private bool _isSpeedBoostActive;
     [SerializeField]
-    [Tooltip("Too adjust boost multiplier, edit the bonus value of the SpeedBoost powerup. Default: 1.")]
+    [Tooltip("To adjust boost multiplier, edit the bonus value of the SpeedBoost powerup. Default: 1.")]
     private float _speedMultiplier = 1;
 
     [Header("Shield Settings")]
@@ -186,6 +190,7 @@ public class Player : MonoBehaviour
         }
         else {
             _lives--;
+            DisplayDamage();
             OnLivesChanged?.Invoke(_lives);
             if (_lives <= 0) {
 
@@ -195,8 +200,31 @@ public class Player : MonoBehaviour
         }
     }
 
+    void DisplayDamage() {
+
+        int engineDamaged = UnityEngine.Random.Range(0, 2);
+        switch (engineDamaged) {
+            case 0:
+                if (!_engineFires[0].activeInHierarchy)
+                    _engineFires[0].SetActive(true);
+                else if (!_engineFires[1].activeInHierarchy)
+                    _engineFires[1].SetActive(true);
+                break;
+            case 1:
+                if (!_engineFires[1].activeInHierarchy)
+                    _engineFires[1].SetActive(true);
+                else if (!_engineFires[0].activeInHierarchy)
+                    _engineFires[0].SetActive(true);
+                break;
+            default:
+                Debug.Log("Whoopsie, check random number generator!");
+                break;
+        }
+    }
+
     void PlayerDeath() {
 
+        PoolManager.Instance.RequestPoolMember(transform.position, PoolManager.PoolType.Explosion);
         OnPlayerDeath?.Invoke();
         Destroy(this.gameObject);
     }

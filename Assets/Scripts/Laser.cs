@@ -11,6 +11,25 @@ public class Laser : MonoBehaviour
     private float _offScreenYPos;
     [SerializeField]
     private bool _hasParent;
+    [SerializeField]
+    private AudioClip _audioClip;
+    
+    private bool _isInitialized;
+
+    private void OnEnable() {
+        PoolManager.OnPoolMemberCreated += Initialize;
+
+        if (_isInitialized)
+            AudioManager.Instance.PlayClip(_audioClip);
+    }
+
+    private void OnDisable() {
+        PoolManager.OnPoolMemberCreated -= Initialize;
+    }
+
+    void Initialize() {
+        _isInitialized = true;
+    }
 
     private void Update() {
         transform.Translate(Vector3.up * _speed * Time.deltaTime);
@@ -29,6 +48,10 @@ public class Laser : MonoBehaviour
 
         if (other.TryGetComponent<Enemy>(out Enemy enemy)) { 
             enemy.Damage();
+            StartCoroutine(ReturnToPool());
+        }
+        else if (other.TryGetComponent<Asteroid>(out Asteroid asteroid)) {
+            asteroid.Destroyed();
             StartCoroutine(ReturnToPool());
         }
     }
