@@ -18,6 +18,8 @@ public class Player : MonoBehaviour
     [Header("Ship Settings")]
     [SerializeField]
     private GameObject[] _engineFires;
+    [SerializeField]
+    private float _thrusterBoost;
 
     [Header("Player Boundary Settings")]
     [SerializeField]
@@ -109,6 +111,13 @@ public class Player : MonoBehaviour
                 Shoot();
             }
         }
+
+        if (Input.GetKeyDown(KeyCode.LeftShift)) {
+            ActivateThrusters();
+        }
+        if (Input.GetKeyUp(KeyCode.LeftShift)) {
+            DeactivateThrusters();
+        }
     }
 
     #region --- Player Position ---
@@ -120,6 +129,14 @@ public class Player : MonoBehaviour
         transform.Translate(movementVector);
 
         CheckPlayerBounds();
+    }
+
+    void ActivateThrusters() {
+        _speedMultiplier += _thrusterBoost;
+    }
+
+    void DeactivateThrusters() {
+        _speedMultiplier -= _thrusterBoost;
     }
 
     void CheckPlayerBounds() {

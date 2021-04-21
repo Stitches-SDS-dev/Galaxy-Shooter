@@ -333,7 +333,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 2105243327
   m_SortingLayer: 2
-  m_SortingOrder: 3
+  m_SortingOrder: 2
   m_Sprite: {fileID: 21300000, guid: 333b0196b7a764df5a7768ead9b69dbc, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -1764,6 +1764,7 @@ MonoBehaviour:
   _engineFires:
   - {fileID: 2128178357}
   - {fileID: 1177751685}
+  _thrusterBoost: 0.4
   _bindLeft: 1
   _bindRight: 1
   _leftBindX: -9
