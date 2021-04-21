@@ -20,7 +20,8 @@ public class Powerup : MonoBehaviour
     public enum PowerupType {
         TripleShot,
         SpeedBoost,
-        Shield
+        Shield,
+        Ammo
     }
 
     void Update()

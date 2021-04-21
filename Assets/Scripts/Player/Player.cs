@@ -305,6 +305,11 @@ public class Player : MonoBehaviour
         }
     }
 
+    public void AddAmmo(int bonus) {
+        _currentAmmo = bonus;
+        OnAmmoChanged?.Invoke(_currentAmmo, _maxAmmo);
+    }
+
     public bool TripleShotStatus() {
         return _isTripleShotActive;
     }
@@ -315,6 +320,10 @@ public class Player : MonoBehaviour
 
     public bool ShieldStatus() {
         return _isShieldActive;
+    }
+
+    public int AmmoStatus() {
+        return _currentAmmo;
     }
 
     #endregion

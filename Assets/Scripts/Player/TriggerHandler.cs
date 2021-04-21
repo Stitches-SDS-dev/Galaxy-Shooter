@@ -72,6 +72,18 @@ public class TriggerHandler : MonoBehaviour
                 }
                 break;
 
+            case Powerup.PowerupType.Ammo:
+                
+                if (_player.AmmoStatus() < 15) {
+
+                    powerup.PlaySFX();
+                    _player.AddAmmo((int)bonus);
+                    Destroy(powerup.gameObject);
+
+                    // Only adds ammo to Player so no cooldown required
+                }
+                break;
+
             default:
                 Debug.Log("No such Powerup: " + type);
                 break;

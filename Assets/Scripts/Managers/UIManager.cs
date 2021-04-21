@@ -61,8 +61,6 @@ public class UIManager : MonoBehaviour
     void UpdateAmmoDisplay(int currentAmmo, int maxAmmo) {
         float ammoPercentage = (float)currentAmmo / maxAmmo;
         _ammoImage.fillAmount = ammoPercentage;
-
-        Debug.Log("Ammo UI updated - " + ammoPercentage);
     }
 
     void DisplayGameOver() {
