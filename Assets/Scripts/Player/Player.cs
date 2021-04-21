@@ -66,8 +66,12 @@ public class Player : MonoBehaviour
     [SerializeField]
     private GameObject _shieldGameObject;
     [SerializeField]
+    private Color[] _shieldColors;
+    [SerializeField]
     [Tooltip("To adjust shield bonus power, edit the bonus value of the Shield powerup.")]
     private int _shieldPower = 0;
+    [SerializeField]
+    private SpriteRenderer _shieldRenderer;
 
     public static Action OnPlayerDeath;
     public static Action<int> OnScoreChange;
@@ -196,13 +200,22 @@ public class Player : MonoBehaviour
         OnScoreChange?.Invoke(_score);
     }
 
+    void SetShieldAppearance() {
+        _shieldRenderer.color = _shieldColors[_shieldPower - 1];
+    }
+
     public void Damage() {
 
         if (_lives > 0) {
 
             if (_shieldPower > 0) {
+                // Reduce shieldPower and display appropriate color
                 _shieldPower--;
+                if (_shieldPower > 0)
+                    SetShieldAppearance();
+
                 if (_shieldPower <= 0) {
+                    // If shield runs out, deactivate
                     _isShieldActive = false;
                     _shieldGameObject.SetActive(false);
                 }
@@ -273,6 +286,7 @@ public class Player : MonoBehaviour
         if (_isShieldActive) {
             _shieldPower += bonus;
             _shieldGameObject.SetActive(true);
+            SetShieldAppearance();
         }
     }
 

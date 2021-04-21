@@ -335,7 +335,7 @@ SpriteRenderer:
   m_SortingLayer: 2
   m_SortingOrder: 2
   m_Sprite: {fileID: 21300000, guid: 333b0196b7a764df5a7768ead9b69dbc, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0, g: 1, b: 0.13840461, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -1783,7 +1783,12 @@ MonoBehaviour:
   _speedMultiplier: 1
   _isShieldActive: 0
   _shieldGameObject: {fileID: 145086159}
+  _shieldColors:
+  - {r: 1, g: 0, b: 0, a: 1}
+  - {r: 0, g: 0.47456598, b: 1, a: 1}
+  - {r: 0, g: 1, b: 0.13725491, a: 1}
   _shieldPower: 0
+  _shieldRenderer: {fileID: 145086161}
 --- !u!212 &1348622611
 SpriteRenderer:
   m_ObjectHideFlags: 0
