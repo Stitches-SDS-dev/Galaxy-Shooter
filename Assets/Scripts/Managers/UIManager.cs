@@ -30,18 +30,24 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private Sprite[] _livesImages;
 
+    [Header("Ammo Display")]
+    [SerializeField]
+    private Image _ammoImage;
+
     public static Action OnGameOver;
 
     private void OnEnable() {
         Player.OnScoreChange += UpdateScoreDisplay;
         Player.OnLivesChanged += UpdateLivesDisplay;
         Player.OnPlayerDeath += DisplayGameOver;
+        Player.OnAmmoChanged += UpdateAmmoDisplay;
     }
 
     private void OnDisable() {
         Player.OnScoreChange -= UpdateScoreDisplay;
         Player.OnLivesChanged -= UpdateLivesDisplay;
         Player.OnPlayerDeath -= DisplayGameOver;
+        Player.OnAmmoChanged -= UpdateAmmoDisplay;
     }
 
     void UpdateScoreDisplay(int score) {
@@ -50,6 +56,13 @@ public class UIManager : MonoBehaviour
 
     void UpdateLivesDisplay(int lives) {
         _livesImage.sprite = _livesImages[lives];
+    }
+
+    void UpdateAmmoDisplay(int currentAmmo, int maxAmmo) {
+        float ammoPercentage = (float)currentAmmo / maxAmmo;
+        _ammoImage.fillAmount = ammoPercentage;
+
+        Debug.Log("Ammo UI updated - " + ammoPercentage);
     }
 
     void DisplayGameOver() {

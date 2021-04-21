@@ -14,6 +14,11 @@ public class Player : MonoBehaviour
     private int _score = 0;
     [SerializeField]
     private int _lives;
+    [SerializeField]
+    private int _maxAmmo;
+    private int _currentAmmo;
+    [SerializeField]
+    private AudioClip _noAmmoSound;
 
     [Header("Ship Settings")]
     [SerializeField]
@@ -76,9 +81,11 @@ public class Player : MonoBehaviour
     public static Action OnPlayerDeath;
     public static Action<int> OnScoreChange;
     public static Action<int> OnLivesChanged;
+    public static Action<int, int> OnAmmoChanged;
 
     private void Start() {
         transform.position = new Vector3(0, _lowerBindY, 0);
+        _currentAmmo = _maxAmmo;
     }
 
     private void OnEnable() {
@@ -180,14 +187,22 @@ public class Player : MonoBehaviour
 
     void Shoot() {
 
-        if (_isTripleShotActive) {
-            Instantiate(_tripleShotPrefab, transform.position, Quaternion.identity, _tripleShotParent);
+        if (_currentAmmo > 0) {
+            if (_isTripleShotActive) {
+                Instantiate(_tripleShotPrefab, transform.position, Quaternion.identity, _tripleShotParent);
+            }
+            else {
+                Vector3 laserSpawn = transform.position;
+                laserSpawn.y += _laserSpawnYOffset;
+
+                PoolManager.Instance.RequestPoolMember(laserSpawn, PoolManager.PoolType.Laser);
+            }
+
+            _currentAmmo--;
+            OnAmmoChanged?.Invoke(_currentAmmo, _maxAmmo);
         }
         else {
-            Vector3 laserSpawn = transform.position;
-            laserSpawn.y += _laserSpawnYOffset;
-
-            PoolManager.Instance.RequestPoolMember(laserSpawn, PoolManager.PoolType.Laser);
+            AudioManager.Instance.PlayClip(_noAmmoSound);
         }
     }
 
