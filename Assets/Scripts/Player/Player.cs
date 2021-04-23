@@ -237,7 +237,7 @@ public class Player : MonoBehaviour
             }
             else {
                 _lives--;
-                DisplayDamage();
+                DisplayDamage(false);
                 OnLivesChanged?.Invoke(_lives);
                 if (_lives <= 0) {
 
@@ -248,24 +248,41 @@ public class Player : MonoBehaviour
         }
     }
 
-    void DisplayDamage() {
+    void DisplayDamage(bool isRepair) {
 
         int engineDamaged = UnityEngine.Random.Range(0, 2);
+
         switch (engineDamaged) {
             case 0:
-                if (!_engineFires[0].activeInHierarchy)
-                    _engineFires[0].SetActive(true);
-                else if (!_engineFires[1].activeInHierarchy)
-                    _engineFires[1].SetActive(true);
+
+                if (!isRepair) {
+                    if (!_engineFires[0].activeInHierarchy)
+                        _engineFires[0].SetActive(true);
+                    else if (!_engineFires[1].activeInHierarchy)
+                        _engineFires[1].SetActive(true);
+                }
+                else {
+                    if (_engineFires[0].activeInHierarchy)
+                        _engineFires[0].SetActive(false);
+                    else if (_engineFires[1].activeInHierarchy)
+                        _engineFires[1].SetActive(false);
+                }
                 break;
+
             case 1:
-                if (!_engineFires[1].activeInHierarchy)
-                    _engineFires[1].SetActive(true);
-                else if (!_engineFires[0].activeInHierarchy)
-                    _engineFires[0].SetActive(true);
-                break;
-            default:
-                Debug.Log("Whoopsie, check random number generator!");
+
+                if (!isRepair) {
+                    if (!_engineFires[1].activeInHierarchy)
+                        _engineFires[1].SetActive(true);
+                    else if (!_engineFires[0].activeInHierarchy)
+                        _engineFires[0].SetActive(true);
+                }
+                else {
+                    if (_engineFires[1].activeInHierarchy)
+                        _engineFires[1].SetActive(false);
+                    else if (_engineFires[0].activeInHierarchy)
+                        _engineFires[0].SetActive(false);
+                }
                 break;
         }
     }
@@ -313,6 +330,7 @@ public class Player : MonoBehaviour
     public void AddLife(int bonus) {
         _lives += bonus;
         OnLivesChanged?.Invoke(_lives);
+        DisplayDamage(true);
     }
 
     public bool TripleShotStatus() {
