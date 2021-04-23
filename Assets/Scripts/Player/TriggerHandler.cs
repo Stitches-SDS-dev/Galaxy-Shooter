@@ -80,7 +80,19 @@ public class TriggerHandler : MonoBehaviour
                     _player.AddAmmo((int)bonus);
                     Destroy(powerup.gameObject);
 
-                    // Only adds ammo to Player so no cooldown required
+                    // Only adds ammo to the Player so no cooldown required
+                }
+                break;
+
+            case Powerup.PowerupType.Health:
+
+                if (_player.LivesStatus() < 3) {
+
+                    powerup.PlaySFX();
+                    _player.AddLife((int)bonus);
+                    Destroy(powerup.gameObject);
+
+                    // Only adds a life to the Player so no cooldown required
                 }
                 break;
 

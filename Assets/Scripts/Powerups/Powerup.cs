@@ -21,7 +21,8 @@ public class Powerup : MonoBehaviour
         TripleShot,
         SpeedBoost,
         Shield,
-        Ammo
+        Ammo,
+        Health
     }
 
     void Update()

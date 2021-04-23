@@ -660,7 +660,8 @@ MonoBehaviour:
   - {fileID: 385419806305325530, guid: 23b31ce70f0b2bb47924de37eed613a9, type: 3}
   - {fileID: 3066272790189110739, guid: cf47c9ec684b991458cdccc70c40946f, type: 3}
   - {fileID: 6552428760994874882, guid: 1b3a95f7851d27848812a6da83601bcf, type: 3}
-  - {fileID: 853338018641447938, guid: 6cc76ae1a2c572f4fb93b51dddc49011, type: 3}
+  - {fileID: 1014966835742169820, guid: 6cc76ae1a2c572f4fb93b51dddc49011, type: 3}
+  - {fileID: 5673000662753193884, guid: fb730eb557c9be049b197a1a61057f48, type: 3}
   _powerupSpawnY: 7.5
   _powerupMinSpawnX: -9
   _powerupMaxSpawnX: 9
@@ -2662,60 +2663,3 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 18aa6167181510149b49a30364e3220d, type: 3}
---- !u!1001 &8302531590946706503
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 853338018641447938, guid: 6cc76ae1a2c572f4fb93b51dddc49011, type: 3}
-      propertyPath: m_Name
-      value: Ammo_Powerup
-      objectReference: {fileID: 0}
-    - target: {fileID: 3372701411707277885, guid: 6cc76ae1a2c572f4fb93b51dddc49011, type: 3}
-      propertyPath: m_RootOrder
-      value: 8
-      objectReference: {fileID: 0}
-    - target: {fileID: 3372701411707277885, guid: 6cc76ae1a2c572f4fb93b51dddc49011, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -2.4711905
-      objectReference: {fileID: 0}
-    - target: {fileID: 3372701411707277885, guid: 6cc76ae1a2c572f4fb93b51dddc49011, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 7.299939
-      objectReference: {fileID: 0}
-    - target: {fileID: 3372701411707277885, guid: 6cc76ae1a2c572f4fb93b51dddc49011, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -0.22095129
-      objectReference: {fileID: 0}
-    - target: {fileID: 3372701411707277885, guid: 6cc76ae1a2c572f4fb93b51dddc49011, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3372701411707277885, guid: 6cc76ae1a2c572f4fb93b51dddc49011, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3372701411707277885, guid: 6cc76ae1a2c572f4fb93b51dddc49011, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3372701411707277885, guid: 6cc76ae1a2c572f4fb93b51dddc49011, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3372701411707277885, guid: 6cc76ae1a2c572f4fb93b51dddc49011, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3372701411707277885, guid: 6cc76ae1a2c572f4fb93b51dddc49011, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3372701411707277885, guid: 6cc76ae1a2c572f4fb93b51dddc49011, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 6cc76ae1a2c572f4fb93b51dddc49011, type: 3}
