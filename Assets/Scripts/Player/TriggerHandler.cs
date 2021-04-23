@@ -34,7 +34,7 @@ public class TriggerHandler : MonoBehaviour
         switch (type) {
             case Powerup.PowerupType.TripleShot:
 
-                if (!_player.TripleShotStatus()) {
+                if (!_player.TripleShotStatus() && !_player.WideLaserStatus()) {
 
                     powerup.PlaySFX();
                     _player.ToggleTripleShot();
@@ -70,6 +70,21 @@ public class TriggerHandler : MonoBehaviour
 
                     // Shield depletes with damage so no cooldown required
                 }
+                break;
+
+            case Powerup.PowerupType.WideLaser:
+
+                if (!_player.WideLaserStatus() && !_player.TripleShotStatus()) {
+
+                    powerup.PlaySFX();
+                    _player.ToggleWideLaser();
+                    Destroy(powerup.gameObject);
+
+                    StartCoroutine(PowerupCooldown(duration, () => {
+                        _player.ToggleWideLaser();
+                    }));
+                }
+
                 break;
 
             case Powerup.PowerupType.Ammo:

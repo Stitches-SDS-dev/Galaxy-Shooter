@@ -17,6 +17,7 @@ public class PoolManager : MonoBehaviour
 
     public enum PoolType {
         Laser,
+        WideLaser,
         Enemy,
         Explosion
     }
@@ -28,6 +29,14 @@ public class PoolManager : MonoBehaviour
     private Transform _laserParent;
     [SerializeField]
     private int _initialLaserPoolSize;
+
+    [Header("Wide Laser Settings")]
+    [SerializeField]
+    private GameObject _wideLaserPrefab;
+    [SerializeField]
+    private Transform _wideLaserParent;
+    [SerializeField]
+    private int _initialWideLaserPoolSize;
 
     [Header("Enemy Pool Settings")]
     [SerializeField]
@@ -46,6 +55,7 @@ public class PoolManager : MonoBehaviour
     private int _initialExplosionPoolSize;
 
     private List<GameObject> _laserPool;
+    private List<GameObject> _wideLaserPool;
     private List<GameObject> _enemyPool;
     private List<GameObject> _explosionPool;
 
@@ -61,6 +71,7 @@ public class PoolManager : MonoBehaviour
     private void Start() {
 
         _laserPool = GeneratePool(_laserPrefab, _laserParent, _initialLaserPoolSize);
+        _wideLaserPool = GeneratePool(_wideLaserPrefab, _wideLaserParent, _initialWideLaserPoolSize);
         _enemyPool = GeneratePool(_enemyPrefab, _enemyParent, _initialEnemyPoolSize);
         _explosionPool = GeneratePool(_explosionPrefab, _explosionParent, _initialExplosionPoolSize);                
     }
@@ -105,6 +116,8 @@ public class PoolManager : MonoBehaviour
         switch (pool) {
             case PoolType.Laser:
                 return _laserPool;
+            case PoolType.WideLaser:
+                return _wideLaserPool;
             case PoolType.Enemy:
                 return _enemyPool;
             case PoolType.Explosion:
@@ -125,6 +138,12 @@ public class PoolManager : MonoBehaviour
                 newMember = GenerateNewPoolMember(_laserPrefab, _laserParent, position);
                 requestedPool.Add(newMember);
                 _laserPool = requestedPool;
+                return newMember;
+
+            case PoolType.WideLaser:
+                newMember = GenerateNewPoolMember(_wideLaserPrefab, _wideLaserParent, position);
+                requestedPool.Add(newMember);
+                _wideLaserPool = requestedPool;
                 return newMember;
 
             case PoolType.Enemy:

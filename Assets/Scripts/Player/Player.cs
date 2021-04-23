@@ -48,6 +48,14 @@ public class Player : MonoBehaviour
     [SerializeField]
     private float _laserFireRate;
 
+    [Header("Wide Laser")]
+    [SerializeField]
+    private bool _isWideLaserActive;
+    [SerializeField]
+    private GameObject _wideLaserPrefab;
+    [SerializeField]
+    private float _wideLaserSpawnYOffset;
+
     private float _lastShot = -5f;
 
     [Header("Triple Shot Settings")]
@@ -187,22 +195,35 @@ public class Player : MonoBehaviour
 
     void Shoot() {
 
-        if (_currentAmmo > 0) {
-            if (_isTripleShotActive) {
-                Instantiate(_tripleShotPrefab, transform.position, Quaternion.identity, _tripleShotParent);
-            }
-            else {
-                Vector3 laserSpawn = transform.position;
-                laserSpawn.y += _laserSpawnYOffset;
 
-                PoolManager.Instance.RequestPoolMember(laserSpawn, PoolManager.PoolType.Laser);
-            }
-
-            _currentAmmo--;
-            OnAmmoChanged?.Invoke(_currentAmmo, _maxAmmo);
+        if (_isTripleShotActive) {
+            // Shoot Tripleshot
+            Instantiate(_tripleShotPrefab, transform.position, Quaternion.identity, _tripleShotParent);
         }
         else {
-            AudioManager.Instance.PlayClip(_noAmmoSound);
+
+            Vector3 laserSpawn = transform.position;
+
+            if (!_isWideLaserActive) {
+                // Shoot Normal Laser
+                if (_currentAmmo > 0) {
+                    laserSpawn.y += _laserSpawnYOffset;
+
+                    PoolManager.Instance.RequestPoolMember(laserSpawn, PoolManager.PoolType.Laser);
+
+                    _currentAmmo--;
+                    OnAmmoChanged?.Invoke(_currentAmmo, _maxAmmo);
+                }
+                else {
+                    AudioManager.Instance.PlayClip(_noAmmoSound);
+                }
+            }
+            else {
+                // Shoot Wide Laser
+                laserSpawn.y += _wideLaserSpawnYOffset;
+
+                PoolManager.Instance.RequestPoolMember(laserSpawn, PoolManager.PoolType.WideLaser);
+            }
         }
     }
 
@@ -322,6 +343,10 @@ public class Player : MonoBehaviour
         }
     }
 
+    public void ToggleWideLaser() {
+        _isWideLaserActive = !_isWideLaserActive;
+    }
+
     public void AddAmmo(int bonus) {
         _currentAmmo = bonus;
         OnAmmoChanged?.Invoke(_currentAmmo, _maxAmmo);
@@ -343,6 +368,10 @@ public class Player : MonoBehaviour
 
     public bool ShieldStatus() {
         return _isShieldActive;
+    }
+
+    public bool WideLaserStatus() {
+        return _isWideLaserActive;
     }
 
     public int AmmoStatus() {

@@ -662,6 +662,7 @@ MonoBehaviour:
   - {fileID: 6552428760994874882, guid: 1b3a95f7851d27848812a6da83601bcf, type: 3}
   - {fileID: 1014966835742169820, guid: 6cc76ae1a2c572f4fb93b51dddc49011, type: 3}
   - {fileID: 5673000662753193884, guid: fb730eb557c9be049b197a1a61057f48, type: 3}
+  - {fileID: 7946767922351238890, guid: 1e859b233bfd05548ab2781ee0c3116c, type: 3}
   _powerupSpawnY: 7.5
   _powerupMinSpawnX: -9
   _powerupMaxSpawnX: 9
@@ -1783,6 +1784,9 @@ MonoBehaviour:
   _laserPrefab: {fileID: 6653666527932138966, guid: 8d66b15e303e3314b97dd519cc70eb43, type: 3}
   _laserSpawnYOffset: 0.8
   _laserFireRate: 0.2
+  _isWideLaserActive: 0
+  _wideLaserPrefab: {fileID: 2645722903703406243, guid: e12e427396aa6fb4e858f3adeec2dd7e, type: 3}
+  _wideLaserSpawnYOffset: 0.65
   _isTripleShotActive: 0
   _tripleShotPrefab: {fileID: 7641187270821991210, guid: d725eb80899754a45bd744ecf742881c, type: 3}
   _tripleShotParent: {fileID: 720156710}
@@ -1855,7 +1859,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1348622607}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -3.28, z: 0}
+  m_LocalPosition: {x: 0, y: -3.23, z: 0}
   m_LocalScale: {x: 0.4, y: 0.4, z: 0.4}
   m_Children:
   - {fileID: 145086162}
@@ -2123,6 +2127,7 @@ Transform:
   - {fileID: 720156710}
   - {fileID: 1986575286}
   - {fileID: 1529822988}
+  - {fileID: 1902301379}
   m_Father: {fileID: 914587428}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2141,6 +2146,9 @@ MonoBehaviour:
   _laserPrefab: {fileID: 6653666527932138966, guid: 8d66b15e303e3314b97dd519cc70eb43, type: 3}
   _laserParent: {fileID: 720156710}
   _initialLaserPoolSize: 5
+  _wideLaserPrefab: {fileID: 2645722903703406243, guid: e12e427396aa6fb4e858f3adeec2dd7e, type: 3}
+  _wideLaserParent: {fileID: 1902301379}
+  _initialWideLaserPoolSize: 5
   _enemyPrefab: {fileID: 8799439778144132021, guid: 6e4b40a8a6be4ee48be2eea955b53a55, type: 3}
   _enemyParent: {fileID: 1986575286}
   _initialEnemyPoolSize: 5
@@ -2297,6 +2305,36 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1898724713}
   m_CullTransparentMesh: 1
+--- !u!1 &1902301378
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1902301379}
+  m_Layer: 0
+  m_Name: Wide_Laser_Pool
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1902301379
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1902301378}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1677166129}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1986575285
 GameObject:
   m_ObjectHideFlags: 0

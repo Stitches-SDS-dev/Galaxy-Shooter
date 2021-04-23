@@ -15,7 +15,15 @@ public class Laser : MonoBehaviour
     private bool _hasParent;
     [SerializeField]
     private AudioClip _audioClip;
-    
+
+    [Header("Wide Laser Settings")]
+    [SerializeField]
+    private bool _isWideLaser;
+    [SerializeField]
+    private float _wideLaserExpansionRate;
+    [SerializeField]
+    private Vector3 _startingWideLaserScale;
+
     private bool _isInitialized;
 
     private void OnEnable() {
@@ -27,6 +35,11 @@ public class Laser : MonoBehaviour
 
     private void OnDisable() {
         PoolManager.OnPoolMemberCreated -= Initialize;
+
+        if (_isWideLaser) {
+            transform.localScale = _startingWideLaserScale;
+            //_isWideLaser = false;
+        }
     }
 
     void Initialize() {
@@ -37,6 +50,9 @@ public class Laser : MonoBehaviour
 
         if (_isPlayerLaser) {
             transform.Translate(Vector3.up * _speed * Time.deltaTime);
+
+            if (_isWideLaser)
+                XAxisExpansion();
 
             if (transform.position.y >= _offScreenYPos) {
                 if (_hasParent) {
@@ -56,16 +72,24 @@ public class Laser : MonoBehaviour
         }
     }
 
+    void XAxisExpansion() {
+        Vector3 currentScale = transform.localScale;
+        currentScale.x += _wideLaserExpansionRate;
+        transform.localScale = currentScale;
+    }
+
     private void OnTriggerEnter2D(Collider2D other) {
 
         if (_isPlayerLaser) {
             if (other.TryGetComponent<Enemy>(out Enemy enemy)) {
                 enemy.Damage();
-                StartCoroutine(ReturnToPool());
+                if (!_isWideLaser)
+                    StartCoroutine(ReturnToPool());
             }
             else if (other.TryGetComponent<Asteroid>(out Asteroid asteroid)) {
                 asteroid.Destroyed();
-                StartCoroutine(ReturnToPool());
+                if (!_isWideLaser)
+                    StartCoroutine(ReturnToPool());
             }
         }
         else {

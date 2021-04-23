@@ -22,7 +22,8 @@ public class Powerup : MonoBehaviour
         SpeedBoost,
         Shield,
         Ammo,
-        Health
+        Health,
+        WideLaser
     }
 
     void Update()
