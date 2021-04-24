@@ -353,7 +353,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 145086159}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: -1.18, z: 0}
   m_LocalScale: {x: 2.5, y: 2.5, z: 2.5}
   m_Children: []
   m_Father: {fileID: 1348622612}
@@ -656,13 +656,15 @@ MonoBehaviour:
   _minEnemySpawnTime: 0.75
   _maxEnemySpawnTime: 2.5
   _spawnPowerups: 0
-  _powerupPrefabs:
-  - {fileID: 385419806305325530, guid: 23b31ce70f0b2bb47924de37eed613a9, type: 3}
-  - {fileID: 3066272790189110739, guid: cf47c9ec684b991458cdccc70c40946f, type: 3}
-  - {fileID: 6552428760994874882, guid: 1b3a95f7851d27848812a6da83601bcf, type: 3}
+  _basicPowerupPrefabs:
   - {fileID: 1014966835742169820, guid: 6cc76ae1a2c572f4fb93b51dddc49011, type: 3}
+  - {fileID: 3066272790189110739, guid: cf47c9ec684b991458cdccc70c40946f, type: 3}
+  - {fileID: 385419806305325530, guid: 23b31ce70f0b2bb47924de37eed613a9, type: 3}
+  _rarePowerupPrefabs:
   - {fileID: 5673000662753193884, guid: fb730eb557c9be049b197a1a61057f48, type: 3}
+  - {fileID: 6552428760994874882, guid: 1b3a95f7851d27848812a6da83601bcf, type: 3}
   - {fileID: 7946767922351238890, guid: 1e859b233bfd05548ab2781ee0c3116c, type: 3}
+  _chanceRarePowerupSpawn: 0.3
   _powerupSpawnY: 7.5
   _powerupMinSpawnX: -9
   _powerupMaxSpawnX: 9
@@ -1781,11 +1783,9 @@ MonoBehaviour:
   _rightWrapX: 12
   _lowerBindY: -3
   _upperBindY: 2
-  _laserPrefab: {fileID: 6653666527932138966, guid: 8d66b15e303e3314b97dd519cc70eb43, type: 3}
   _laserSpawnYOffset: 0.8
   _laserFireRate: 0.2
   _isWideLaserActive: 0
-  _wideLaserPrefab: {fileID: 2645722903703406243, guid: e12e427396aa6fb4e858f3adeec2dd7e, type: 3}
   _wideLaserSpawnYOffset: 0.65
   _isTripleShotActive: 0
   _tripleShotPrefab: {fileID: 7641187270821991210, guid: d725eb80899754a45bd744ecf742881c, type: 3}

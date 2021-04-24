@@ -42,8 +42,6 @@ public class Player : MonoBehaviour
 
     [Header("Laser Settings")]
     [SerializeField]
-    private GameObject _laserPrefab;
-    [SerializeField]
     private float _laserSpawnYOffset;
     [SerializeField]
     private float _laserFireRate;
@@ -51,8 +49,6 @@ public class Player : MonoBehaviour
     [Header("Wide Laser")]
     [SerializeField]
     private bool _isWideLaserActive;
-    [SerializeField]
-    private GameObject _wideLaserPrefab;
     [SerializeField]
     private float _wideLaserSpawnYOffset;
 
@@ -66,7 +62,7 @@ public class Player : MonoBehaviour
     [SerializeField]
     private Transform _tripleShotParent;
 
-    [Header("Speed Boost Settings")]
+    [Header("Speed Boost Settings")]    
     [SerializeField]
     private bool _isSpeedBoostActive;
     [SerializeField]

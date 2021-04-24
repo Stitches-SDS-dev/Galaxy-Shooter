@@ -18,13 +18,19 @@ public class SpawnManager : MonoBehaviour
     [SerializeField]
     private bool _spawnPowerups;
     [SerializeField]
-    private GameObject[] _powerupPrefabs;
-    [SerializeField]
     private float _powerupSpawnY;
     [SerializeField]
     private float _powerupMinSpawnX, _powerupMaxSpawnX;
     [SerializeField]
     private float _minPowerupSpawnTime, _maxPowerupSpawnTime;
+    [SerializeField]
+    [Range(0, 1)]
+    private float _chanceRarePowerupSpawn;
+    [SerializeField]
+    private GameObject[] _basicPowerupPrefabs;
+    [SerializeField]
+    private GameObject[] _rarePowerupPrefabs;
+    private GameObject[] _powerupArrayToUse;
 
     private void OnEnable() {
         Player.OnPlayerDeath += OnPlayerDeath;
@@ -81,9 +87,19 @@ public class SpawnManager : MonoBehaviour
             powerupSpawnX = Random.Range(_powerupMinSpawnX, _powerupMaxSpawnX);
             powerupSpawn.Set(powerupSpawnX, _powerupSpawnY, 0);
 
-            powerupIndex = Random.Range(0, _powerupPrefabs.Length);
+            float powerupSelection = Random.Range(0f, 1f);
+            if (powerupSelection < _chanceRarePowerupSpawn) {
+                Debug.Log("Rare Array Selected");
+                _powerupArrayToUse = _rarePowerupPrefabs;
+            }
+            else {
+                Debug.Log("Basic Array Selected");
+                _powerupArrayToUse = _basicPowerupPrefabs;
+            }
 
-            Instantiate(_powerupPrefabs[powerupIndex], powerupSpawn, Quaternion.identity, this.transform);
+            powerupIndex = Random.Range(0, _powerupArrayToUse.Length);
+
+            Instantiate(_powerupArrayToUse[powerupIndex], powerupSpawn, Quaternion.identity, this.transform);
         }
     }
 
