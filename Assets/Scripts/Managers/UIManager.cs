@@ -7,6 +7,7 @@ using System;
 
 public class UIManager : MonoBehaviour
 {
+    [Header("Score Display")]
     [SerializeField]
     private TMP_Text _scoreText;
     
@@ -34,6 +35,21 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private Image _ammoImage;
 
+    [Header("Thruster Guage")]
+    [SerializeField]
+    private Image _thrusterImage;
+    [SerializeField]
+    private float _fillRate;
+    [SerializeField]
+    private float _drainRate;
+    [SerializeField]
+    private float _drainBlinkRate;
+    private Color _colorChanger;
+    private bool _fillGuage, _drainGuage, _waitForFullDrain;
+    private WaitForSeconds _fillWait;
+    private WaitForSeconds _drainWait;
+    private WaitForSeconds _fullDrainBlinkWait;
+
     public static Action OnGameOver;
 
     private void OnEnable() {
@@ -41,6 +57,9 @@ public class UIManager : MonoBehaviour
         Player.OnLivesChanged += UpdateLivesDisplay;
         Player.OnPlayerDeath += DisplayGameOver;
         Player.OnAmmoChanged += UpdateAmmoDisplay;
+        Player.OnThrusterActivityChanged += UpdateThrusterGuage;
+        Player.OnQueryGuageState += QueryGuageState;
+        Player.OnQueryGuageDrainState += QueryDrainState;
     }
 
     private void OnDisable() {
@@ -48,6 +67,9 @@ public class UIManager : MonoBehaviour
         Player.OnLivesChanged -= UpdateLivesDisplay;
         Player.OnPlayerDeath -= DisplayGameOver;
         Player.OnAmmoChanged -= UpdateAmmoDisplay;
+        Player.OnThrusterActivityChanged -= UpdateThrusterGuage;
+        Player.OnQueryGuageState -= QueryGuageState;
+        Player.OnQueryGuageDrainState -= QueryDrainState;
     }
 
     void UpdateScoreDisplay(int score) {
@@ -62,6 +84,8 @@ public class UIManager : MonoBehaviour
         float ammoPercentage = (float)currentAmmo / maxAmmo;
         _ammoImage.fillAmount = ammoPercentage;
     }
+
+    #region --- Game Over ---
 
     void DisplayGameOver() {
 
@@ -103,4 +127,142 @@ public class UIManager : MonoBehaviour
         _menuText.enabled = true;
         OnGameOver?.Invoke();
     }
+
+    #endregion
+
+    #region --- Thruster Guage ---
+
+    void UpdateThrusterGuage(bool active) {
+
+        if (active) {
+            _fillGuage = true;
+            _drainGuage = false;
+            StartCoroutine(FillGuage());
+        }
+        else {
+            _drainGuage = true;
+            _fillGuage = false;
+            StartCoroutine(DrainGuage());
+        }
+    }
+
+    bool QueryGuageState() {
+        return _waitForFullDrain;
+    }
+
+    bool QueryDrainState() {
+        return _drainGuage;
+    }
+
+    IEnumerator FillGuage() {
+
+        _fillWait = new WaitForSeconds(_fillRate);
+
+        _colorChanger = _thrusterImage.color;
+
+        float rValue = _colorChanger.r;
+        float gValue = _colorChanger.g;
+
+        while (_fillGuage) {
+
+            if (_thrusterImage.fillAmount < 1f) {
+                _thrusterImage.fillAmount += 0.01f;
+
+                // While filling guage, change color first from green to yellow
+
+                if (_colorChanger.r < 1) {
+
+                    rValue += 0.02f;
+                }
+                else if (_colorChanger.r >= 1) {
+
+                    // After reaching yellow color, continue change to red
+
+                    rValue = 1;
+                    gValue -= 0.02f;
+                    if (gValue <= 0)
+                        gValue = 0;
+                }
+
+                _colorChanger.r = rValue;
+                _colorChanger.g = gValue;
+
+                _thrusterImage.color = _colorChanger;
+            }
+            else {
+
+                _waitForFullDrain = true;
+                _fillGuage = false;
+                StartCoroutine(BlinkGuage());
+            }
+
+            yield return _fillWait;
+        }
+    }
+
+    IEnumerator BlinkGuage() {
+
+        _fullDrainBlinkWait = new WaitForSeconds(_drainBlinkRate);
+        bool blink = true;
+
+        UpdateThrusterGuage(false);
+
+        while (blink) {
+
+            _colorChanger.a = 0;
+            yield return _fullDrainBlinkWait;
+
+            _colorChanger.a = 0.5f;
+            yield return _fullDrainBlinkWait;
+
+            if (!_drainGuage)
+                blink = false;
+        }
+    }
+
+    IEnumerator DrainGuage() {
+
+        _drainWait = new WaitForSeconds(_drainRate);
+
+        _colorChanger = _thrusterImage.color;
+
+        float rValue = _colorChanger.r;
+        float gValue = _colorChanger.g;
+
+        while (_drainGuage) {
+
+            if (_thrusterImage.fillAmount > 0) {
+                _thrusterImage.fillAmount -= 0.005f;
+
+                // While draining guage, change color from red to yellow
+
+                if (_colorChanger.g < 1) {
+
+                    gValue += 0.01f;
+                }
+                else if (_colorChanger.g >= 1) {
+
+                    // After reaching yellow color, continue change to green
+
+                    gValue = 1;
+                    rValue -= 0.01f;
+                    if (rValue <= 0)
+                        rValue = 0;
+                }
+
+                _colorChanger.r = rValue;
+                _colorChanger.g = gValue;
+
+                _thrusterImage.color = _colorChanger;
+            }
+            else {
+                _waitForFullDrain = false;
+                _drainGuage = false;
+            }
+
+            yield return _drainWait;
+        }
+    }
+
+    #endregion
 }

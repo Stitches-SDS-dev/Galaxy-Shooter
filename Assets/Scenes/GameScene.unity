@@ -524,6 +524,8 @@ RectTransform:
   - {fileID: 891137576}
   - {fileID: 1719622700}
   - {fileID: 1898724714}
+  - {fileID: 582269359}
+  - {fileID: 1369852716}
   m_Father: {fileID: 914587428}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -558,6 +560,9 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 482c8e4c0346b704aa5f1760c3c989d5, type: 3}
   - {fileID: 21300000, guid: 9fe6f40efddf0b64fb68a3382b14a4db, type: 3}
   _ammoImage: {fileID: 1898724715}
+  _thrusterImage: {fileID: 1369852717}
+  _fillRate: 0.01
+  _drainRate: 0
 --- !u!1 &579858924
 GameObject:
   m_ObjectHideFlags: 0
@@ -606,6 +611,81 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &582269358
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 582269359}
+  - component: {fileID: 582269361}
+  - component: {fileID: 582269360}
+  m_Layer: 5
+  m_Name: Thruster_Guage_BG
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &582269359
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 582269358}
+  m_LocalRotation: {x: 0, y: 0, z: 0.7071068, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 6.1249, y: 0.65, z: 1}
+  m_Children: []
+  m_Father: {fileID: 471464037}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 106, y: 350}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &582269360
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 582269358}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 0, g: 0.59607846, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 21300000, guid: 7e2c62cfff2a98546bde91054785a087, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &582269361
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 582269358}
+  m_CullTransparentMesh: 1
 --- !u!1 &625386542
 GameObject:
   m_ObjectHideFlags: 0
@@ -656,6 +736,12 @@ MonoBehaviour:
   _minEnemySpawnTime: 0.75
   _maxEnemySpawnTime: 2.5
   _spawnPowerups: 0
+  _powerupSpawnY: 7.5
+  _powerupMinSpawnX: -9
+  _powerupMaxSpawnX: 9
+  _minPowerupSpawnTime: 5
+  _maxPowerupSpawnTime: 7
+  _chanceRarePowerupSpawn: 0.3
   _basicPowerupPrefabs:
   - {fileID: 1014966835742169820, guid: 6cc76ae1a2c572f4fb93b51dddc49011, type: 3}
   - {fileID: 3066272790189110739, guid: cf47c9ec684b991458cdccc70c40946f, type: 3}
@@ -664,12 +750,6 @@ MonoBehaviour:
   - {fileID: 5673000662753193884, guid: fb730eb557c9be049b197a1a61057f48, type: 3}
   - {fileID: 6552428760994874882, guid: 1b3a95f7851d27848812a6da83601bcf, type: 3}
   - {fileID: 7946767922351238890, guid: 1e859b233bfd05548ab2781ee0c3116c, type: 3}
-  _chanceRarePowerupSpawn: 0.3
-  _powerupSpawnY: 7.5
-  _powerupMinSpawnX: -9
-  _powerupMaxSpawnX: 9
-  _minPowerupSpawnTime: 5
-  _maxPowerupSpawnTime: 7
 --- !u!1 &630160511
 GameObject:
   m_ObjectHideFlags: 0
@@ -1882,6 +1962,81 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _player: {fileID: 1348622610}
+--- !u!1 &1369852715
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1369852716}
+  - component: {fileID: 1369852718}
+  - component: {fileID: 1369852717}
+  m_Layer: 5
+  m_Name: Thruster_Guage_FG
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1369852716
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1369852715}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0.5182273, y: 5.987638, z: 1}
+  m_Children: []
+  m_Father: {fileID: 471464037}
+  m_RootOrder: 8
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 106, y: 350}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1369852717
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1369852715}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 0, g: 1, b: 0, a: 0.49019608}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 21300000, guid: 125d719f6e641fd4090c4fb57e4a8490, type: 3}
+  m_Type: 3
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 1
+  m_FillAmount: 0
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &1369852718
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1369852715}
+  m_CullTransparentMesh: 1
 --- !u!1 &1450595863
 GameObject:
   m_ObjectHideFlags: 0

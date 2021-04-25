@@ -86,6 +86,10 @@ public class Player : MonoBehaviour
     public static Action<int> OnScoreChange;
     public static Action<int> OnLivesChanged;
     public static Action<int, int> OnAmmoChanged;
+    public static Action<bool> OnThrusterActivityChanged;
+
+    public static Func<bool> OnQueryGuageState;
+    public static Func<bool> OnQueryGuageDrainState;
 
     private void Start() {
         transform.position = new Vector3(0, _lowerBindY, 0);
@@ -120,7 +124,7 @@ public class Player : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0)) {
 
-            // simple cooldown for firing laser
+            // Simple cooldown for firing laser
             if (Time.time > _lastShot + _laserFireRate) {
                 _lastShot = Time.time;
                 Shoot();
@@ -128,18 +132,34 @@ public class Player : MonoBehaviour
         }
 
         if (Input.GetKeyDown(KeyCode.LeftShift)) {
-            ActivateThrusters();
+
+            if (OnQueryGuageState != null) {
+                bool thrustersUnavailable = OnQueryGuageState();
+
+                if (!thrustersUnavailable) {
+                    ActivateThrusters();
+                    OnThrusterActivityChanged?.Invoke(true);
+                }
+            }
         }
         if (Input.GetKeyUp(KeyCode.LeftShift)) {
-            DeactivateThrusters();
+
+            if (OnQueryGuageDrainState != null) {
+                bool draining = OnQueryGuageDrainState();
+
+                if (!draining) {
+                    DeactivateThrusters();
+                    OnThrusterActivityChanged?.Invoke(false);
+                }
+            }
         }
     }
 
-    #region --- Player Position ---
+    #region --- Player Movement ---
 
     void PlayerMovement(Vector3 input) {
 
-        Vector3 movementVector = input * _speed * _speedMultiplier * Time.deltaTime;
+        Vector3 movementVector = input * (_speed * _speedMultiplier) * Time.deltaTime;
 
         transform.Translate(movementVector);
 
@@ -273,12 +293,14 @@ public class Player : MonoBehaviour
             case 0:
 
                 if (!isRepair) {
+                    // Show Damage
                     if (!_engineFires[0].activeInHierarchy)
                         _engineFires[0].SetActive(true);
                     else if (!_engineFires[1].activeInHierarchy)
                         _engineFires[1].SetActive(true);
                 }
                 else {
+                    // Hide Damage
                     if (_engineFires[0].activeInHierarchy)
                         _engineFires[0].SetActive(false);
                     else if (_engineFires[1].activeInHierarchy)
@@ -289,12 +311,14 @@ public class Player : MonoBehaviour
             case 1:
 
                 if (!isRepair) {
+                    // Show Damage
                     if (!_engineFires[1].activeInHierarchy)
                         _engineFires[1].SetActive(true);
                     else if (!_engineFires[0].activeInHierarchy)
                         _engineFires[0].SetActive(true);
                 }
                 else {
+                    // Hide Damage
                     if (_engineFires[1].activeInHierarchy)
                         _engineFires[1].SetActive(false);
                     else if (_engineFires[0].activeInHierarchy)
