@@ -87,8 +87,8 @@ public class SpawnManager : MonoBehaviour
             powerupSpawnX = Random.Range(_powerupMinSpawnX, _powerupMaxSpawnX);
             powerupSpawn.Set(powerupSpawnX, _powerupSpawnY, 0);
 
-            float powerupSelection = Random.Range(0f, 1f);
-            if (powerupSelection < _chanceRarePowerupSpawn) {
+            float powerupArraySelection = Random.Range(0f, 1f);
+            if (powerupArraySelection < _chanceRarePowerupSpawn) {
                 Debug.Log("Rare Array Selected");
                 _powerupArrayToUse = _rarePowerupPrefabs;
             }

@@ -130,7 +130,7 @@ public class UIManager : MonoBehaviour
 
     #endregion
 
-    #region --- Thruster Guage ---
+    #region --- Thruster Temp Guage ---
 
     void UpdateThrusterGuage(bool active) {
 
@@ -256,6 +256,10 @@ public class UIManager : MonoBehaviour
                 _thrusterImage.color = _colorChanger;
             }
             else {
+
+                _colorChanger.a = 0.5f;
+                _thrusterImage.color = _colorChanger;
+
                 _waitForFullDrain = false;
                 _drainGuage = false;
             }

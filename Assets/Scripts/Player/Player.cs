@@ -83,6 +83,7 @@ public class Player : MonoBehaviour
     private SpriteRenderer _shieldRenderer;
 
     public static Action OnPlayerDeath;
+    public static Action<float> OnPlayerDamage;
     public static Action<int> OnScoreChange;
     public static Action<int> OnLivesChanged;
     public static Action<int, int> OnAmmoChanged;
@@ -275,6 +276,7 @@ public class Player : MonoBehaviour
             else {
                 _lives--;
                 DisplayDamage(false);
+                OnPlayerDamage?.Invoke(0.5f);
                 OnLivesChanged?.Invoke(_lives);
                 if (_lives <= 0) {
 
