@@ -32,10 +32,6 @@ public class GameManager : MonoBehaviour
         Player.OnPlayerDamage -= CameraShake;
     }
 
-    private void Start() {
-        //StartCoroutine(ScrollBackgroundStars());
-    }
-
     private void Update() {
 
         ScrollBackgroundStars();
@@ -92,8 +88,6 @@ public class GameManager : MonoBehaviour
             main.eulerAngles = -rotation;
             yield return wait;
             duration -= 0.1f;
-
-            Debug.Log(duration);
         }
 
         main.eulerAngles = Vector3.zero;

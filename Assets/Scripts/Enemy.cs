@@ -5,6 +5,14 @@ using System;
 
 public class Enemy : MonoBehaviour
 {
+    public enum EnemyType {
+        Standard,
+        SideMoving
+    }
+
+    [Header("Enemy Configuration")]
+    [SerializeField]
+    private EnemyType _type;
     [SerializeField]
     private float _speed;
     [SerializeField]
@@ -36,21 +44,72 @@ public class Enemy : MonoBehaviour
     [SerializeField]
     private float _minXSpawn, _maxXSpawn;
 
-    
+    private Vector3 _direction = new Vector3(0, 0, 0);
+    private bool _changeDirection = true;                      // Only for use with 'SideMoving' enemy type
 
     public static Action<int> OnEnemyDeath;
 
     private void OnEnable() {
         _preFireDelay = new WaitForSeconds(_delayBeforeFiring);
+        _direction = Vector3.down;
         StartCoroutine(FiringRoutine());
     }
 
     private void Update() {
-        transform.Translate(Vector3.down * _speed * Time.deltaTime);
 
-        if (transform.position.y <= _offSceenYPos && !_exploding) {
-            Respawn();
+        if (!_exploding) {
+
+            if (_type == EnemyType.SideMoving) {
+                NewDirection();
+            }
+
+            transform.Translate(_direction * _speed * Time.deltaTime);
+            BindMovement();
+
+            if (transform.position.y <= _offSceenYPos) {
+                Respawn();
+            }
         }
+    }
+
+    void BindMovement() {
+
+        Vector3 pos = transform.position;
+
+        if (pos.x < -9f)
+            pos.x = -9f;
+        if (pos.x > 9f)
+            pos.x = 9f;
+
+        transform.position = pos;
+    }
+
+    void NewDirection() {
+
+        if (_changeDirection) {
+            int directionChooser = UnityEngine.Random.Range(0, 1000);
+
+            if (directionChooser % 2 == 0 && directionChooser > 150) {
+                _direction.x = -0.5f;
+            }
+            else if (directionChooser % 2 != 0 && directionChooser < 850) {
+                _direction.x = 0.5f;
+            }
+            else {
+                _direction.x = 0f;
+            }
+
+            _changeDirection = false;
+            StartCoroutine(ResetMovement(() => {
+                _changeDirection = true;
+            }));
+        }
+    }
+
+    IEnumerator ResetMovement(Action onComplete) {
+        yield return new WaitForSeconds(0.75f);
+
+        onComplete?.Invoke();
     }
 
     void Respawn() {
@@ -84,7 +143,7 @@ public class Enemy : MonoBehaviour
 
         yield return _preFireDelay;
 
-        while (isActiveAndEnabled) {
+        while (!_exploding) {
 
             Vector3 laserSpawn = transform.position;
             laserSpawn.y += _laserYOffset;

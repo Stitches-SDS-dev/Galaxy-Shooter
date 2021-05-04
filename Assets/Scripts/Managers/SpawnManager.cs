@@ -89,11 +89,9 @@ public class SpawnManager : MonoBehaviour
 
             float powerupArraySelection = Random.Range(0f, 1f);
             if (powerupArraySelection < _chanceRarePowerupSpawn) {
-                Debug.Log("Rare Array Selected");
                 _powerupArrayToUse = _rarePowerupPrefabs;
             }
             else {
-                Debug.Log("Basic Array Selected");
                 _powerupArrayToUse = _basicPowerupPrefabs;
             }
 

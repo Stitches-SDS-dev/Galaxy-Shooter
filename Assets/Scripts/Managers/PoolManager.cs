@@ -40,11 +40,12 @@ public class PoolManager : MonoBehaviour
 
     [Header("Enemy Pool Settings")]
     [SerializeField]
-    private GameObject _enemyPrefab;
+    private GameObject[] _enemyPrefabs;
     [SerializeField]
     private Transform _enemyParent;
     [SerializeField]
     private int _initialEnemyPoolSize;
+    private int _selectedEnemyPool;
 
     [Header("Explosion Pool Settings")]
     [SerializeField]
@@ -56,7 +57,7 @@ public class PoolManager : MonoBehaviour
 
     private List<GameObject> _laserPool;
     private List<GameObject> _wideLaserPool;
-    private List<GameObject> _enemyPool;
+    private List<GameObject>[] _enemyPool;
     private List<GameObject> _explosionPool;
 
     public static Action OnPoolMemberCreated;
@@ -72,8 +73,12 @@ public class PoolManager : MonoBehaviour
 
         _laserPool = GeneratePool(_laserPrefab, _laserParent, _initialLaserPoolSize);
         _wideLaserPool = GeneratePool(_wideLaserPrefab, _wideLaserParent, _initialWideLaserPoolSize);
-        _enemyPool = GeneratePool(_enemyPrefab, _enemyParent, _initialEnemyPoolSize);
-        _explosionPool = GeneratePool(_explosionPrefab, _explosionParent, _initialExplosionPoolSize);                
+        _explosionPool = GeneratePool(_explosionPrefab, _explosionParent, _initialExplosionPoolSize);
+
+        _enemyPool = new List<GameObject>[_enemyPrefabs.Length];
+        for (int i = 0; i < _enemyPrefabs.Length; i++) {
+            _enemyPool[i] = GeneratePool(_enemyPrefabs[i], _enemyParent, _initialEnemyPoolSize);
+        }
     }
 
     List<GameObject> GeneratePool(GameObject prefab, Transform parent, int count) {
@@ -119,7 +124,10 @@ public class PoolManager : MonoBehaviour
             case PoolType.WideLaser:
                 return _wideLaserPool;
             case PoolType.Enemy:
-                return _enemyPool;
+                int selectEnemyPool = UnityEngine.Random.Range(0, _enemyPrefabs.Length);
+                Debug.Log("Enemy Pool selected : " + selectEnemyPool);
+                _selectedEnemyPool = selectEnemyPool;
+                return _enemyPool[selectEnemyPool];
             case PoolType.Explosion:
                 return _explosionPool;
             default:
@@ -147,9 +155,9 @@ public class PoolManager : MonoBehaviour
                 return newMember;
 
             case PoolType.Enemy:
-                newMember = GenerateNewPoolMember(_enemyPrefab, _enemyParent, position);
+                newMember = GenerateNewPoolMember(_enemyPrefabs[_selectedEnemyPool], _enemyParent, position);
                 requestedPool.Add(newMember);
-                _enemyPool = requestedPool;
+                _enemyPool[_selectedEnemyPool] = requestedPool;
                 return newMember;
 
             case PoolType.Explosion:
