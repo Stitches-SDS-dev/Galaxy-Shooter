@@ -52,6 +52,7 @@ public class Enemy : MonoBehaviour
     private void OnEnable() {
         _preFireDelay = new WaitForSeconds(_delayBeforeFiring);
         _direction = Vector3.down;
+        _exploding = false;
         StartCoroutine(FiringRoutine());
     }
 

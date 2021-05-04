@@ -99,10 +99,12 @@ public class Player : MonoBehaviour
 
     private void OnEnable() {
         Enemy.OnEnemyDeath += IncreaseScore;
+        WaveManager.OnWaveComplete += ReplenishAmmo;
     }
 
     private void OnDisable() {
         Enemy.OnEnemyDeath -= IncreaseScore;
+        WaveManager.OnWaveComplete -= ReplenishAmmo;
     }
 
     private void Update() {
@@ -251,6 +253,11 @@ public class Player : MonoBehaviour
     void IncreaseScore(int value) {
         _score += value;
         OnScoreChange?.Invoke(_score);
+    }
+
+    void ReplenishAmmo() {
+        _currentAmmo = _maxAmmo;
+        OnAmmoChanged?.Invoke(_currentAmmo, _maxAmmo);
     }
 
     void SetShieldAppearance() {

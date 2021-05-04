@@ -125,7 +125,6 @@ public class PoolManager : MonoBehaviour
                 return _wideLaserPool;
             case PoolType.Enemy:
                 int selectEnemyPool = UnityEngine.Random.Range(0, _enemyPrefabs.Length);
-                Debug.Log("Enemy Pool selected : " + selectEnemyPool);
                 _selectedEnemyPool = selectEnemyPool;
                 return _enemyPool[selectEnemyPool];
             case PoolType.Explosion:

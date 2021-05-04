@@ -33,12 +33,14 @@ public class SpawnManager : MonoBehaviour
     private GameObject[] _powerupArrayToUse;
 
     private void OnEnable() {
-        Player.OnPlayerDeath += OnPlayerDeath;
+        Player.OnPlayerDeath += StopSpawning;
+        WaveManager.OnWaveComplete += StopSpawning;
         Asteroid.OnAsteroidDestruction += StartSpawning;
     }
 
     private void OnDisable() {
-        Player.OnPlayerDeath -= OnPlayerDeath;
+        Player.OnPlayerDeath -= StopSpawning;
+        WaveManager.OnWaveComplete -= StopSpawning;
         Asteroid.OnAsteroidDestruction -= StartSpawning;
     }
 
@@ -46,14 +48,15 @@ public class SpawnManager : MonoBehaviour
 
         _spawnEnemies = _spawnPowerups = true;
 
-        StartCoroutine(SpawnEnemies());
+        StartCoroutine(SpawnEnemies(WaveManager.Instance.GetEnemyCountThisWave()));
         StartCoroutine(SpawnPowerups());
     }
 
-    IEnumerator SpawnEnemies() {
+    IEnumerator SpawnEnemies(int enemiesToSpawn) {
 
         Vector3 enemySpawn = new Vector3(0, 0, 0);
         float enemySpawnX;
+        int enemiesSpawned = 0;
 
         while (_spawnEnemies) {
 
@@ -67,6 +70,11 @@ public class SpawnManager : MonoBehaviour
             enemySpawn.Set(enemySpawnX, _enemySpawnY, 0);
 
             PoolManager.Instance.RequestPoolMember(enemySpawn, PoolManager.PoolType.Enemy);
+
+            enemiesSpawned++;
+            if (enemiesSpawned == enemiesToSpawn) {
+                _spawnEnemies = false;
+            }
         }
     }
 
@@ -101,7 +109,7 @@ public class SpawnManager : MonoBehaviour
         }
     }
 
-    void OnPlayerDeath() {
+    void StopSpawning() {
         _spawnEnemies = _spawnPowerups = false;
     }
 }
